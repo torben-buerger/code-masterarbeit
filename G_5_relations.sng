@@ -1,0 +1,75 @@
+// Define the polynomial ring R = K[x1,x2,x3,x4] where K = QQ[zeta] for a primitive 24th root of unity zeta
+ring R = (0, zeta),(x(1..4)),dp;
+minpoly = zeta^8-zeta^4+1;
+number i    = zeta^6;
+number sigma = zeta^8;
+number q2   = zeta^3 + 1/zeta^3;
+number q3   = zeta^8 - 1/zeta^8;
+
+// Invariants of G_5_symp (see the OSCAR computation)
+poly invar_1 = x(1)*x(3) + x(2)*x(4);
+poly invar_2 = x(1)^5*x(2) - x(1)*x(2)^5;
+poly invar_3 = x(1)*x(2)^2*x(3)^3 - x(2)^3*x(3)^2*x(4) - x(1)^3*x(3)*x(4)^2 + x(1)^2*x(2)*x(4)^3;
+poly invar_4 = x(3)^5*x(4) - x(3)*x(4)^5;
+poly invar_5 = x(1)^4*x(2)^3*x(3) + 1/7*x(2)^7*x(3) - 1/7*x(1)^7*x(4) - x(1)^3*x(2)^4*x(4);
+poly invar_6 = x(2)^4*x(3)^4 - 4*x(1)^3*x(2)*x(3)^3*x(4) + 6*x(1)^2*x(2)^2*x(3)^2*x(4)^2 - 4*x(1)*x(2)^3*x(3)*x(4)^3 + x(1)^4*x(4)^4;
+poly invar_7 = x(2)*x(3)^7 - 7*x(1)*x(3)^4*x(4)^3 + 7*x(2)*x(3)^3*x(4)^4 - x(1)*x(4)^7;
+poly invar_8 = x(3)^12 - 33*x(3)^8*x(4)^4 - 33*x(3)^4*x(4)^8 + x(4)^12;
+poly invar_9 = x(2)^3*x(3)^9 + 3/5*x(1)^3*x(3)^8*x(4) - 36/5*x(1)^2*x(2)*x(3)^7*x(4)^2 + 84/5*x(1)*x(2)^2*x(3)^6*x(4)^3 - 42/5*x(2)^3*x(3)^5*x(4)^4 + 42/5*x(1)^3*x(3)^4*x(4)^5 - 84/5*x(1)^2*x(2)*x(3)^3*x(4)^6 + 36/5*x(1)*x(2)^2*x(3)^2*x(4)^7 - 3/5*x(2)^3*x(3)*x(4)^8 - x(1)^3*x(4)^9;
+poly invar_10 = x(1)^4*x(2)^2*x(3)^6 - 1/17*x(2)^6*x(3)^6 + 24/17*x(1)^3*x(2)^3*x(3)^5*x(4) - 15/17*x(1)^6*x(3)^4*x(4)^2 + 15/17*x(1)^2*x(2)^4*x(3)^4*x(4)^2 - 40/17*x(1)^5*x(2)*x(3)^3*x(4)^3 - 40/17*x(1)*x(2)^5*x(3)^3*x(4)^3 + 15/17*x(1)^4*x(2)^2*x(3)^2*x(4)^4 - 15/17*x(2)^6*x(3)^2*x(4)^4 + 24/17*x(1)^3*x(2)^3*x(3)*x(4)^5 - 1/17*x(1)^6*x(4)^6 + x(1)^2*x(2)^4*x(4)^6;
+poly invar_11 = x(1)^8*x(2)*x(3)^3 - 14/23*x(1)^4*x(2)^5*x(3)^3 - 1/23*x(2)^9*x(3)^3 + 60/23*x(1)^7*x(2)^2*x(3)^2*x(4) - 84/23*x(1)^3*x(2)^6*x(3)^2*x(4) + 84/23*x(1)^6*x(2)^3*x(3)*x(4)^2 - 60/23*x(1)^2*x(2)^7*x(3)*x(4)^2 + 1/23*x(1)^9*x(4)^3 + 14/23*x(1)^5*x(2)^4*x(4)^3 - x(1)*x(2)^8*x(4)^3;
+poly invar_12 = x(1)^12 - 33*x(1)^8*x(2)^4 - 33*x(1)^4*x(2)^8 + x(2)^12;
+
+ideal invars_ideal_1 = invar_1, invar_2, invar_3, invar_4, invar_5, invar_6, invar_7, invar_8, invar_9, invar_10, invar_11, invar_12;
+
+// Define the Eigenvectors as given by Berry
+poly F11 = x(1)*x(3) + x(2)*x(4);
+poly F40 = x(1)^4 + x(2)^4 - 2*q3*x(1)^2*x(2)^2;
+poly F31 = x(1)^3*x(4) - q3*x(1)^2*x(2)*x(3) + q3*x(1)*x(2)^2*x(4) - x(2)^3*x(3);
+poly G22 = x(1)^2*x(3)^2 + q3*x(2)^2*x(3)^2 + q3*x(1)^2*x(4)^2 + x(2)^2*x(4)^2 - 4*x(1)*x(2)*x(3)*x(4);
+poly F13 = x(1)*x(4)^3 + q3*x(2)*x(3)*x(4)^2 - q3*x(1)*x(3)^2*x(4) - x(2)*x(3)^3;
+poly F04 = x(3)^4 + x(4)^4 + 2*q3*x(3)^2*x(4)^2;
+poly F60 = x(1)^5*x(2) - x(1)*x(2)^5;
+poly G51 = x(1)^5*x(3) - 5*x(1)^4*x(2)*x(4) - 5*x(1)*x(2)^4*x(3) + x(2)^5*x(4);
+poly G42 = x(1)^4*x(3)*x(4) - 2*x(1)^3*x(2)*x(4)^2 + 2*x(1)*x(2)^3*x(3)^2 - x(2)^4*x(3)*x(4);
+poly F33 = x(1)^3*x(3)*x(4)^2 - x(1)^2*x(2)*x(4)^3 - x(1)*x(2)^2*x(3)^3 + x(2)^3*x(3)^2*x(4);
+poly G24 = 2*x(1)^2*x(3)*x(4)^3 + x(1)*x(2)*x(3)^4 - x(1)*x(2)^4*x(4)^4 - 2*x(2)^2*x(3)^3*x(4);
+poly G15 = x(1)*x(3)^5 - 5*x(1)*x(3)*x(4)^4 - 5*x(2)*x(3)^4*x(4) + x(2)*x(4)^5;
+poly F06 = x(3)^5*x(4) - x(3)*x(4)^5;
+
+proc conj_poly(poly p) {
+    return(subst(p, zeta, -zeta^7 + zeta^3));
+}
+
+F40_conj = conj_poly(F40);
+F31_conj = conj_poly(F31);
+G22_conj = conj_poly(G22);
+F13_conj = conj_poly(F13);
+F04_conj = conj_poly(F04);
+
+// Invariants as given by Berry
+poly B1 = -F40*F31 - F40_conj*F31_conj;
+poly B0 = F31*F13 + F31_conj*F13_conj;
+poly Bneg1 = -F13*F04 - F13_conj*F04_conj;
+poly C2 = F40^3 + F40_conj^3;
+poly C1 = -F31^3 - F31_conj^3;
+poly C0 = F40*F13^2 + F40_conj*F13_conj^2 + 4*F11^3*F33;
+poly Cneg1 = -F13^3 - F13_conj^3;
+poly Cneg2 = F04^3 + F04_conj^3;
+poly h = F11;
+poly A1 = 6*F60;
+poly A0 = 3*F33;
+poly Aneg1 = 6*F06;
+
+// Compute relations in the ring S = K[y1,...,y12]
+ring S = (0, zeta), (y(1..12)), dp;
+minpoly = zeta^8 - zeta^4 + 1;
+
+// Define map from S to 
+setring R;
+map f = S, invar_1, invar_2, invar_3, invar_4, invar_5, invar_6, invar_7, invar_8, invar_9, invar_10, invar_11, invar_12;
+ideal zero_ideal = 0;
+
+// Compute the kernel of f
+setring S;
+ideal relations_ideal = preimage(R, f, zero_ideal);
