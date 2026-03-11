@@ -113,6 +113,7 @@ ref_poly_12 = v_12[2]*x[1] - v_12[1]*x[2];
 ref_poly_13 = v_13[2]*x[1] - v_13[1]*x[2];
 ref_poly_14 = v_14[2]*x[1] - v_14[1]*x[2];
 delta_11 = ref_poly_11*ref_poly_12*ref_poly_13*ref_poly_14;  # Using the notation of the Bonnafé construction, this is the polynomial for the first orbit
+delta_12 = ref_poly_11^2*ref_poly_12^2*ref_poly_13^2*ref_poly_14^2;  # This is the final polynomial for omega_1 since e_omega_1 = 3
 
 # Next, consider th orbit omega_2 corresponding to ref_2 and ref_3
 v_21 = V(collect(ref_2_unique_lines[1][:, 1]));
@@ -128,6 +129,7 @@ ref_poly_22 = v_22[2]*x[1] - v_22[1]*x[2];
 ref_poly_23 = v_23[2]*x[1] - v_23[1]*x[2];
 ref_poly_24 = v_24[2]*x[1] - v_24[1]*x[2];
 delta_21 = ref_poly_21*ref_poly_22*ref_poly_23*ref_poly_24;  # Using the notation of the Bonnafé construction, this is the polynomial for the second orbit
+delta_22 = ref_poly_21^2*ref_poly_22^2*ref_poly_23^2*ref_poly_24^2;  # This is the final polynomial for omega_2 since e_omega_2 = 3
 
 # Compute the coordinate ring of the variety (V+V^*)/G_5 by finding the invariant polynomials
 r_1_symp = block_diagonal_matrix([r_1, transpose(inv(r_1))]);
@@ -138,3 +140,9 @@ poly_invar = polynomial_ring(IR);
 u = gens(poly_invar);
 invars = fundamental_invariants(IR);
 invars_ideal_1 = ideal(poly_invar, invars);
+
+# Compute the relations of the invariants and therefore a presentation of the invariant ring as quotient of a polynomial ring
+B, y = polynomial_ring(K, :y => (1:12));
+f = hom(B, poly_invar, invars);
+# The kernel of f is the ideal of relations that has to be factored out to present the invariant ring
+relations_ideal = kernel(f);  # Computation runs out of memory after three hours
