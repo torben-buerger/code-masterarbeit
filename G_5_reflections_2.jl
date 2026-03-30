@@ -268,3 +268,9 @@ w_11_5 = S(-64*y[1]^3*y[3] + (32//3*zeta^4 - 16//3)*y[2]*y[4] + (-128//3*zeta^4 
 
 W_delta_11_prime = ideal(S, [w_11_1, w_11_2, w_11_3, w_11_4, w_11_5]);
 print(W_delta_11 == W_delta_11_prime + relations_ideal);  # Returns true
+
+# Investigate the second polynomial delta_12 and check that it yields the same radical ideal as delta_11, which is expected as delta_12 = delta_11^2
+W_delta_12 = preimage(pi_1, delta_12_ideal);
+basis_W_delta_12 = standard_basis(W_delta_12, ordering=negdegrevlex(S));
+quo_W_delta_12 = quo_map(W_delta_12);
+quo_basis_W_delta_12 = ideal(S_quo, [simplify(quo_map(b)) for b in basis_W_delta_12]);
