@@ -444,16 +444,18 @@ nonzero_eval_sing_6 = nonzero_constant_indices(eval_sing_6);  # Shows that there
 print(nonzero_eval_sing_6);
 
 
-# Finally, we compute the fiber of the blowup map over the origin
+# Finally, we compute the fiber and the reduced fiber of the blowup map over the origin
 #fiber_origin_ideal = ideal(C, union(gens(kernel_blowup_map), [z[1], z[2], z[3], z[4], z[5], z[6], z[7], z[8]]));
 #reduced_fiber_origin_ideal = radical(fiber_origin_ideal);
 
 fiber_origin_basis_ideal = ideal(C, union(gens(basis_blowup_ideal), [z[1], z[2], z[3], z[4], z[5], z[6], z[7], z[8]]));
 reduced_fiber_origin_basis_ideal = radical(fiber_origin_basis_ideal);
 
+# The reduced fiber is used to compute the dimension of the fiver, which is used to show that the resolution is semi-small
 X_fiber = spec(C, reduced_fiber_origin_basis_ideal);
 components_fiber = irreducible_components(X_fiber);
 
+# In order to compare the fibers of W_1 and W_2, we use the non-reduced fiber
 X_nonred_fiber = spec(C, fiber_origin_basis_ideal);
 
 min_basis_fiber = standard_basis(modulus(OO(X_nonred_fiber)), ordering=negdegrevlex(C));
@@ -461,8 +463,9 @@ X_min_basis_fiber = spec(C, ideal(C, min_basis_fiber));
 
 sing_fiber = singular_locus(X_min_basis_fiber);
 sing_ideal = modulus(OO(sing_fiber[1]));
-reduced_sing_ideal = radical(sing_ideal);
+reduced_sing_ideal = radical(sing_ideal);  # Shows that the reduced singular locus is not the whole fiber and a comparison with the singular locus of the fiber obtained by blowing up in W_1 shows that the reduced singular locus is given by the same ideal
 
+# We want to compare the fibers above the origin obtained by blowing up in W_1 and W_2 to show that the resulting resolutions are non-isomorphic
 min_basis_fiber_W_1 = [z[1], z[2], z[3], z[4], z[5], z[6], z[7], z[8], 12*b[1]^2 + 4*q3*z[4]*b[2]*b[3] - q3*z[3]*b[3]^2 + q3*z[2]*b[6]^2, 2*b[1]*b[2] + b[3]*b[5] - z[1]*b[6]^2,
     3*b[1]*b[4] - 3*z[6]*b[6]^2 + 2*q3*z[1]^2*b[2]*b[5] - 2*q3*z[1]*z[3]*b[2]*b[6], 3*b[3]*b[4] + 4*q3*z[5]*b[2]*b[6] - 3*z[3]*b[6]^2 - 4*q3*z[1]^2*b[2]^2,
     6*b[1]*b[5] - 4*q3*z[4]*b[2]^2 + q3*z[3]*b[2]*b[3] - q3*z[5]*b[6]^2, b[5]^2 - b[4]*b[6] + q3*z[3]*b[2]^2];
@@ -473,10 +476,13 @@ min_basis_fiber_W_2 = [z[1], z[2], z[3], z[4], z[5], z[6], z[7], z[8], 12*b[1]^2
     6*b[1]*b[5] - 4*q3*z[5]*b[2]^2 + q3*z[2]*b[2]*b[3] - q3*z[4]*b[6]^2, b[5]^2 - b[4]*b[6] - q3*z[2]*b[2]^2];
 X_min_basis_fiber_W_2 = spec(C, ideal(C, min_basis_fiber_W_2));
 
-common_fiber = intersect(X_min_basis_fiber_W_1, X_min_basis_fiber);
-print(common_fiber == X_min_basis_fiber);
+common_fiber = intersect(X_min_basis_fiber_W_1, X_min_basis_fiber_W_2);
+print(common_fiber == X_min_basis_fiber_W_1);
+print(common_fiber == X_min_basis_fiber_W_2);  # Shows that the intersection of the two fibers is properly contained in both original fibers
 common_fiber_ideal = modulus(OO(common_fiber));
 common_fiber_min_basis = standard_basis(common_fiber_ideal, ordering=negdegrevlex(C));
+print(union(common_fiber,sing_fiber[1]) == X_min_basis_fiber_W_1);  
+print(union(common_fiber,sing_fiber[1]) == X_min_basis_fiber_W_2);  # Shows that there are points neither contained in the intersection of the two fibers nor in the singular locus
 
 embed_B = hom(Bt, C, [z[1], z[2], z[3], z[4], z[5], z[6], z[7], z[8], 0]);
 embedded_relations = ideal(C, [embed_B(g) for g in gens(relations)]);

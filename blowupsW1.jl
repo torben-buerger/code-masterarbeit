@@ -316,9 +316,11 @@ print(nonzero_eval_sing_6);
 fiber_origin_basis_ideal = ideal(C, union(gens(basis_blowup_ideal), [z[1], z[2], z[3], z[4], z[5], z[6], z[7], z[8]]));
 reduced_fiber_origin_basis_ideal = radical(fiber_origin_basis_ideal);
 
+# The reduced fiber is used to compute the dimension of the fiver, which is used to show that the resolution is semi-small
 X_fiber = spec(C, reduced_fiber_origin_basis_ideal);
 components_fiber = irreducible_components(X_fiber);
 
+# In order to compare the fibers of W_1 and W_2, we use the non-reduced fiber
 X_nonred_fiber = spec(C, fiber_origin_basis_ideal);
 
 min_basis_fiber = standard_basis(modulus(OO(X_nonred_fiber)), ordering=negdegrevlex(C));
@@ -326,4 +328,4 @@ X_min_basis_fiber = spec(C, ideal(C, min_basis_fiber));
 
 sing_fiber = singular_locus(X_min_basis_fiber);
 sing_ideal = modulus(OO(sing_fiber[1]));
-reduced_sing_ideal = radical(sing_ideal);
+reduced_sing_ideal = radical(sing_ideal);  # Shows that the reduced singular locus is not the whole fiber
