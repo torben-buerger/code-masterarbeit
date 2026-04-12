@@ -260,11 +260,11 @@ rad_test_delta_11 = radical(test_delta_11);
 print(rad_test_delta_11 == test_delta_11);  # Retuns true and thus shows that the ideal is radical, so blowing up along this ideal is equivalent to blowing up the corresponding subvariety
 
 # List the generators of the ideal W_delta_11_prime which satisfies W_delta_11 = W_delta_11_prime + relations_ideal
-w_11_1 = S((2*zeta^4 - 1)*y[1]*y[2] + 3*y[5]);
-w_11_2 = S(6*y[1]^4 + (8*zeta^4 - 4)*y[1]*y[3] + 3*y[6]);
-w_11_3 = S((-2*zeta^4 + 1)*y[2]^2 + 3*y[8]);
-w_11_4 = S((-4*zeta^4 + 2)*y[1]^2*y[5] + (-2*zeta^4 + 1)*y[2]*y[3] + 3*y[9]);
-w_11_5 = S(-64*y[1]^3*y[3] + (32//3*zeta^4 - 16//3)*y[2]*y[4] + (-128//3*zeta^4 + 64//3)*y[3]^2 + 48*y[10]);
+w_11_1 = (2*zeta^4 - 1)*y[1]*y[2] + 3*y[5];
+w_11_2 = 6*y[1]^4 + (8*zeta^4 - 4)*y[1]*y[3] + 3*y[6];
+w_11_3 = (-2*zeta^4 + 1)*y[2]^2 + 3*y[8];
+w_11_4 = (-4*zeta^4 + 2)*y[1]^2*y[5] + (-2*zeta^4 + 1)*y[2]*y[3] + 3*y[9];
+w_11_5 = -64*y[1]^3*y[3] + (32//3*zeta^4 - 16//3)*y[2]*y[4] + (-128//3*zeta^4 + 64//3)*y[3]^2 + 48*y[10];
 
 W_delta_11_prime = ideal(S, [w_11_1, w_11_2, w_11_3, w_11_4, w_11_5]);
 print(W_delta_11 == W_delta_11_prime + relations_ideal);  # Returns true
@@ -329,3 +329,18 @@ test_delta_11_delta_21 = ideal(S_quo, nonzero_quo_W_delta_11_delta_21[[1:5; 8:11
 print(test_delta_11_delta_21 == quo_W_delta_11_delta_21);
 rad_test_delta_11_delta_21 = radical(test_delta_11_delta_21);
 print(rad_test_delta_11_delta_21 == test_delta_11_delta_21);  
+print("test done");
+
+w_11_21_1 = y[1]*y[8] + y[2]*y[5];
+w_11_21_2 = y[1]^2*y[2]^2 + 3*y[5]^2;
+w_11_21_3 = -2*y[1]^4*y[2] + 12*y[1]*y[9] + 3*y[2]*y[6];
+w_11_21_4 = 6*y[1]^4*y[5] + 4*y[1]^2*y[2]*y[3] + 3*y[5]*y[6];
+w_11_21_5 = 12*y[1]^8 - 2*y[1]^2*y[2]*y[4] + 6*y[5]*y[7] - 3*y[6]^2;
+w_11_21_6 = -y[1]*y[2]^3 + 3*y[5]*y[8];
+w_11_21_7 = -y[1]*y[2]^2*y[3] - 9*y[5]*y[9] + 3*y[6]*y[8];
+w_11_21_8 = -y[1]*y[2]^2*y[4] - 18*y[5]*y[10] + 3*y[7]*y[8];
+w_11_21_9 = y[2]^4 + 3*y[8]^2;
+w_11_21_10 = 162*y[1]^4*y[10] + 36*y[1]^3*y[2]*y[7] + 18*y[1]*y[2]*y[3]*y[4] + 54*y[5]*y[11] - 27*y[6]*y[10];
+
+W_delta_11_delta_21_prime = ideal(S, [w_11_21_1, w_11_21_2, w_11_21_3, w_11_21_4, w_11_21_5, w_11_21_6, w_11_21_7, w_11_21_8, w_11_21_9, w_11_21_10]);
+print(W_delta_11_delta_21 == W_delta_11_delta_21_prime + relations_ideal);  # Returns true
