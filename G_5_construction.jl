@@ -126,6 +126,15 @@ basis_relations = standard_basis(relations_ideal, ordering=negdegrevlex(S));
 g = hom(S, R, [invar_1, invar_2, invar_3, invar_4, invar_5, invar_6, invar_7, invar_8, invar_9, invar_10, invar_11, invar_12]);
 relations_ideal_1 = kernel(g);
 print(relations_ideal == relations_ideal_1)  # confirm that both ideals are equal=#
+# Compute the relations via elimination theory
+T, (x_1, x_2, x_3, x_4, y_1, y_2, y_3, y_4, y_5, y_6, y_7, y_8, y_9, y_10, y_11, y_12) = polynomial_ring(K, [:x_1, :x_2, :x_3, :x_4, :y_1, :y_2, :y_3, :y_4, :y_5, :y_6, :y_7, :y_8, :y_9, :y_10, :y_11, :y_12]);
+embed_RT = hom(R, T, [x_1, x_2, x_3, x_4]);
+embed_ST = hom(S, T, [y_1, y_2, y_3, y_4, y_5, y_6, y_7, y_8, y_9, y_10, y_11, y_12]);
+
+difference_ideal = ideal(T, [embed_RT(h) - y_1, embed_RT(A1) - y_2, embed_RT(A0) - y_3, embed_RT(Aneg1) - y_4, embed_RT(B1) - y_5, embed_RT(B0) - y_6, embed_RT(Bneg1) - y_7, embed_RT(C2) - y_8, embed_RT(C1) - y_9, embed_RT(C0) - y_10, embed_RT(Cneg1) - y_11, embed_RT(Cneg2) - y_12]);
+elim_ideal = eliminate(difference_ideal, [x_1, x_2, x_3, x_4]);
+basis_elim = standard_basis(elim_ideal, ordering=negdegrevlex(T));
+print(collect(basis_elim))
 
 # The above approach is not effienciently computable, therefore we use the approach of Appendix B in Berry's paper
 A, (X, Y) = polynomial_ring(K, [:X, :Y]);
