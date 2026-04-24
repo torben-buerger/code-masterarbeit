@@ -363,6 +363,7 @@ R240 = F40^3*F40_conj^3;
 R024 = F04^3*F04_conj^3;
 
 Berry_ideal = ideal(R, [R44, R93, R93prime, R66, R66prime, R39, R39prime, R131, R113, R142, R214, R191, R119, R240, R024]);
+print(is_subset(Berry_ideal, invars_ideal));  # Returns true, so the ideal given by Berry is indeed an ideal in the invariant ring of G_5_symp
 
 # Compute the ideal in S which corresponds to the ideal given by Berry
 W_Berry_ideal = preimage(pi_1, Berry_ideal);
@@ -372,6 +373,6 @@ quo_basis_W_Berry_ideal = ideal(S_quo, [simplify(quo_map(b)) for b in basis_W_Be
 print(quo_basis_W_Berry_ideal);
 
 # Check if any of the previously computed ideals is equal the ideal corresponding to Berry's ideal
-print(quo_basis_W_Berry_ideal == quo_W_delta_11_prime + relations_ideal);  # Returns 
-print(quo_basis_W_Berry_ideal == quo_W_delta_21_prime + relations_ideal);  # Returns
-print(quo_basis_W_Berry_ideal == quo_W_delta_11_delta_21_prime + relations_ideal);  # Returns
+print(quo_basis_W_Berry_ideal == W_delta_11_prime + relations_ideal);  # Returns 
+print(quo_basis_W_Berry_ideal == W_delta_21_prime + relations_ideal);  # Returns
+print(quo_basis_W_Berry_ideal == W_delta_11_delta_21_prime + relations_ideal);  # Returns
