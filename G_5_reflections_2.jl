@@ -344,3 +344,34 @@ w_11_21_10 = 162*y[1]^4*y[10] + 36*y[1]^3*y[2]*y[7] + 18*y[1]*y[2]*y[3]*y[4] + 5
 
 W_delta_11_delta_21_prime = ideal(S, [w_11_21_1, w_11_21_2, w_11_21_3, w_11_21_4, w_11_21_5, w_11_21_6, w_11_21_7, w_11_21_8, w_11_21_9, w_11_21_10]);
 print(W_delta_11_delta_21 == W_delta_11_delta_21_prime + relations_ideal);  # Returns true
+
+# Compare this to the ideal in which Berry computes the blowup. This ideal is corresponds to the reduced singular locus
+R44 = G22*G22_conj;
+R93 = F31*F40_conj*G22_conj;
+R93prime = F40*F31_conj*G22;
+R66 = F04*F40_conj*G22_conj;
+R66prime = F40*F04_conj*G22;
+R39 = F04*F31_conj*G22_conj;
+R39prime = F13*F04_conj*G22;
+R131 = F40*F40_conj*G51;
+R113 = F04*F04_conj*G15;
+R142 = F40*F31*F40_conj*F31_conj;
+R214 = F13*F04*F13_conj*F04_conj;
+R191 = F40*F31*F40_conj^3;
+R119 = F13*F04*F04_conj^3;
+R240 = F40^3*F40_conj^3;
+R024 = F04^3*F04_conj^3;
+
+Berry_ideal = ideal(R, [R44, R93, R93prime, R66, R66prime, R39, R39prime, R131, R113, R142, R214, R191, R119, R240, R024]);
+
+# Compute the ideal in S which corresponds to the ideal given by Berry
+W_Berry_ideal = preimage(pi_1, Berry_ideal);
+basis_W_Berry_ideal = standard_basis(W_Berry_ideal, ordering=negdegrevlex(S));
+quo_W_Berry_ideal = quo_map(W_Berry_ideal);
+quo_basis_W_Berry_ideal = ideal(S_quo, [simplify(quo_map(b)) for b in basis_W_Berry_ideal]);
+print(quo_basis_W_Berry_ideal);
+
+# Check if any of the previously computed ideals is equal the ideal corresponding to Berry's ideal
+print(quo_basis_W_Berry_ideal == quo_W_delta_11_prime + relations_ideal);  # Returns 
+print(quo_basis_W_Berry_ideal == quo_W_delta_21_prime + relations_ideal);  # Returns
+print(quo_basis_W_Berry_ideal == quo_W_delta_11_delta_21_prime + relations_ideal);  # Returns
