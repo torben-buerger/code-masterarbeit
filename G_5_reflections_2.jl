@@ -370,9 +370,9 @@ W_Berry_ideal = preimage(pi_1, Berry_ideal);
 basis_W_Berry_ideal = standard_basis(W_Berry_ideal, ordering=negdegrevlex(S));
 quo_W_Berry_ideal = quo_map(W_Berry_ideal);
 quo_basis_W_Berry_ideal = ideal(S_quo, [simplify(quo_map(b)) for b in basis_W_Berry_ideal]);
-print(quo_basis_W_Berry_ideal);
+print(gens(quo_basis_W_Berry_ideal));
 
 # Check if any of the previously computed ideals is equal the ideal corresponding to Berry's ideal
-print(quo_basis_W_Berry_ideal == W_delta_11_prime + relations_ideal);  # Returns 
-print(quo_basis_W_Berry_ideal == W_delta_21_prime + relations_ideal);  # Returns
-print(quo_basis_W_Berry_ideal == W_delta_11_delta_21_prime + relations_ideal);  # Returns
+print(W_Berry_ideal == W_delta_11_prime + relations_ideal);  # Returns 
+print(W_Berry_ideal == W_delta_21_prime + relations_ideal);  # Returns
+print(W_Berry_ideal == W_delta_11_delta_21_prime + relations_ideal);  # Returns
