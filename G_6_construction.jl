@@ -202,6 +202,7 @@ delta_11_ideal = ideal(R, delta_11);
 delta_21_ideal = ideal(R, delta_21);
 delta_22_ideal = ideal(R, delta_22);
 delta_11_21_ideal = ideal(R, delta_11*delta_21);
+delta_11_22_ideal = ideal(R, delta_11*delta_22);
 
 # Investigate the first polynomial delta_11 and compute the variety along which the blow-up shall be performed
 W_delta_11 = preimage(pi, delta_11_ideal);
@@ -223,7 +224,7 @@ w_11_3 = -3*y[1]*y[5] + y[2]*y[4];
 w_11_4 = 4*y[1]^3*y[4] - y[2]*y[6] - 3*y[3]*y[5] + (8*zeta^2-4)*y[4]^2;
 
 W_delta_11_prime = ideal(S, [w_11_1, w_11_2, w_11_3, w_11_4]);
-print(W_delta_11 == W_delta_11_prime + relations_ideal);  # Returns true
+print(W_delta_11 == W_delta_11_prime + relations_ideal_1);  # Returns true
 
 
 # Investigate the third polynomial delta_21 and compute the variety along which the blow-up shall be performed
@@ -246,7 +247,7 @@ w_21_3 = -y[2]^3 + 2*y[10];
 w_21_4 = (-8*zeta^2 + 4)*y[1]*y[4] + y[2]*y[3];
 
 W_delta_21_prime = ideal(S, [w_21_1, w_21_2, w_21_3, w_21_4]);
-print(W_delta_21 == W_delta_21_prime + relations_ideal);  # Returns true
+print(W_delta_21 == W_delta_21_prime + relations_ideal_1);  # Returns true
 
 
 # Investigate the final polynomial delta_22 and compute the variety along which the blow-up shall be performed
@@ -269,4 +270,20 @@ w_22_3 = (4*zeta^2 - 2)*y[1]^2*y[2]*y[4] - y[1]*y[2]^2*y[3] + (12*zeta^2 - 6)*y[
 w_22_4 = -48*y[1]^2*y[4]^2 + (-16*zeta^2 + 8)*y[1]*y[2]*y[3]*y[4] + y[2]^2*y[3]^2;
 
 W_delta_22_prime = ideal(S, [w_22_1, w_22_2, w_22_3, w_22_4]);
-print(W_delta_22 == W_delta_22_prime + relations_ideal);  # Returns true
+print(W_delta_22 == W_delta_22_prime + relations_ideal_1);  # Returns true
+
+
+# Investigate the composite polynomial delta_11*delta_21
+W_delta_11_21 = preimage(pi, delta_11_21_ideal);
+basis_W_delta_11_21 = standard_basis(W_delta_11_21, ordering=negdegrevlex(S));
+quo_W_delta_11_21 = quo_map(W_delta_11_21);
+quo_basis_W_delta_11_21 = ideal(S_quo, [simplify(quo_map(b)) for b in basis_W_delta_11_21]);
+print(length(basis_W_delta_11_21));
+
+
+# Investigate the composite polynomial delta_11*delta_21
+W_delta_11_22 = preimage(pi, delta_11_22_ideal);
+basis_W_delta_11_22 = standard_basis(W_delta_11_22, ordering=negdegrevlex(S));
+quo_W_delta_11_22 = quo_map(W_delta_11_22);
+quo_basis_W_delta_11_22 = ideal(S_quo, [simplify(quo_map(b)) for b in basis_W_delta_11_22]);
+print(length(basis_W_delta_11_22));
