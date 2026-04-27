@@ -203,21 +203,21 @@ delta_21_ideal = ideal(R, delta_21);
 delta_22_ideal = ideal(R, delta_22);
 
 # Investigate the first polynomial delta_11 and compute the variety along which the blow-up shall be performed
-W_delta_11 = preimage(pi_1, delta_11_ideal);
+W_delta_11 = preimage(pi, delta_11_ideal);
 basis_W_delta_11 = standard_basis(W_delta_11, ordering=negdegrevlex(S));
 quo_W_delta_11 = quo_map(W_delta_11);
 quo_basis_W_delta_11 = ideal(S_quo, [simplify(quo_map(b)) for b in basis_W_delta_11]);
 print(length(basis_W_delta_11));
 
 # Investigate the third polynomial delta_21 and compute the variety along which the blow-up shall be performed
-W_delta_21 = preimage(pi_1, delta_21_ideal);
+W_delta_21 = preimage(pi, delta_21_ideal);
 basis_W_delta_21 = standard_basis(W_delta_21, ordering=negdegrevlex(S));
 quo_W_delta_21 = quo_map(W_delta_21);
 quo_basis_W_delta_21 = ideal(S_quo, [simplify(quo_map(b)) for b in basis_W_delta_21]);
 print(length(basis_W_delta_21));
 
 # Investigate the final polynomial delta_22 and compute the variety along which the blow-up shall be performed
-W_delta_22 = preimage(pi_1, delta_22_ideal);
+W_delta_22 = preimage(pi, delta_22_ideal);
 basis_W_delta_22 = standard_basis(W_delta_22, ordering=negdegrevlex(S));
 quo_W_delta_22 = quo_map(W_delta_22);
 quo_basis_W_delta_22 = ideal(S_quo, [simplify(quo_map(b)) for b in basis_W_delta_22]);
