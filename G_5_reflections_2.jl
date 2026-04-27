@@ -39,11 +39,11 @@ ref_3_list = collect(classes[16]);
 ref_4 = representative(classes[17]);
 ref_4_list = collect(classes[17]);
 
-# Find the reflecting hyperplanes (= lines as we are in dimension 2) of the reflections by computing the eigenvectors 
-ref_1_eigvecs = [eigenspaces(K, matrix(m)) for m in ref_1_list];
-ref_2_eigvecs = [eigenspaces(K, matrix(m)) for m in ref_2_list];
-ref_3_eigvecs = [eigenspaces(K, matrix(m)) for m in ref_3_list];
-ref_4_eigvecs = [eigenspaces(K, matrix(m)) for m in ref_4_list];
+# Find the reflecting hyperplanes (= lines as we are in dimension 2) of the reflections by computing the eigenvectors.  We have to take the transposed matrices because Oscar computes the action from the right
+ref_1_eigvecs = [eigenspaces(K, transpose(matrix(m))) for m in ref_1_list];
+ref_2_eigvecs = [eigenspaces(K, transpose(matrix(m))) for m in ref_2_list];
+ref_3_eigvecs = [eigenspaces(K, transpose(matrix(m))) for m in ref_3_list];
+ref_4_eigvecs = [eigenspaces(K, transpose(matrix(m))) for m in ref_4_list];
 
 # Extract the polynomials and vectors defining the hyperplanes from the eigenvectors given as column vectors corresponding to the eigenvalue 1
 R, x = polynomial_ring(K, :x => (1:4));
@@ -59,11 +59,12 @@ ref_4_vec = matrix(K, 2, 1, [ref_4_eigvecs[1][K(1)][1]; ref_4_eigvecs[1][K(1)][2
 ref_vectors = [ref_1_vec, ref_2_vec, ref_3_vec, ref_4_vec];
 
 # Compute the orbits of the action of G_5 on the reflecting hyperplanes by applying the group elements to the polynomials defining the hyperplanes
-G_5_list = collect(G_5);
-ref_1_orbit = [matrix(m)*ref_1_vec for m in G_5_list];
-ref_2_orbit = [matrix(m)*ref_2_vec for m in G_5_list];
-ref_3_orbit = [matrix(m)*ref_3_vec for m in G_5_list];
-ref_4_orbit = [matrix(m)*ref_4_vec for m in G_5_list];
+G_5_transpose = matrix_group([transpose(matrix(m)) for m in gens(G_5)]);
+G_5_tr_list = collect(G_5_transpose);
+ref_1_orbit = [matrix(m)*ref_1_vec for m in G_5_tr_list];
+ref_2_orbit = [matrix(m)*ref_2_vec for m in G_5_tr_list];
+ref_3_orbit = [matrix(m)*ref_3_vec for m in G_5_tr_list];
+ref_4_orbit = [matrix(m)*ref_4_vec for m in G_5_tr_list];
 
 # Compute unique representatives of all lines that form the orbits
 function unique_lines(vectors)
@@ -110,7 +111,6 @@ ref_3_unique_lines = unique_lines(ref_3_orbit);
 ref_4_unique_lines = unique_lines(ref_4_orbit);  # The orbits of ref_1 and ref_4 are the same, as well as those of ref_2 and ref_3
 
 # Determine the inertia groups of the lines by checking which group elements fix the lines, the action in Oscar is from the right, so we have to transpose the matrix group
-G_5_transpose = matrix_group([transpose(matrix(m)) for m in gens(G_5)]);
 V = vector_space(K, 2);
 
 # First, consider the orbit omega_1 corresponding to ref_1 and ref_4
@@ -128,8 +128,8 @@ ref_poly_11 = v_11[2]*x[1] - v_11[1]*x[2];
 ref_poly_12 = v_12[2]*x[1] - v_12[1]*x[2];
 ref_poly_13 = v_13[2]*x[1] - v_13[1]*x[2];
 ref_poly_14 = v_14[2]*x[1] - v_14[1]*x[2];
-delta_11 = ref_poly_11*ref_poly_12*ref_poly_13*ref_poly_14;  # Using the notation of the Bonnafé construction, this is the polynomial for the first orbit
-delta_12 = ref_poly_11^2*ref_poly_12^2*ref_poly_13^2*ref_poly_14^2;  # This is the final polynomial for omega_1 since e_omega_1 = 3
+delta_21 = ref_poly_11*ref_poly_12*ref_poly_13*ref_poly_14;  # Using the notation of the Bonnafé construction, this is the polynomial for the first orbit
+delta_22 = ref_poly_11^2*ref_poly_12^2*ref_poly_13^2*ref_poly_14^2;  # This is the final polynomial for omega_1 since e_omega_1 = 3
 
 # Next, consider the orbit omega_2 corresponding to ref_2 and ref_3
 v_21 = V(collect(ref_2_unique_lines[1][:, 1]));
@@ -146,8 +146,8 @@ ref_poly_21 = v_21[2]*x[1] - v_21[1]*x[2];
 ref_poly_22 = v_22[2]*x[1] - v_22[1]*x[2];
 ref_poly_23 = v_23[2]*x[1] - v_23[1]*x[2];
 ref_poly_24 = v_24[2]*x[1] - v_24[1]*x[2];
-delta_21 = ref_poly_21*ref_poly_22*ref_poly_23*ref_poly_24;  # Using the notation of the Bonnafé construction, this is the polynomial for the second orbit
-delta_22 = ref_poly_21^2*ref_poly_22^2*ref_poly_23^2*ref_poly_24^2;  # This is the final polynomial for omega_2 since e_omega_2 = 3
+delta_11 = ref_poly_21*ref_poly_22*ref_poly_23*ref_poly_24;  # Using the notation of the Bonnafé construction, this is the polynomial for the second orbit
+delta_12 = ref_poly_21^2*ref_poly_22^2*ref_poly_23^2*ref_poly_24^2;  # This is the final polynomial for omega_2 since e_omega_2 = 3
 
 # Define the coordinate ring of the variety (V+V^*)/G_5_symp by taking the relations of the invariant ring of G_5_symp computed by Berry, see G_5_construction.jl
 # First, we define the invariants of the symplectic action of G_5, see G_5_construction.jl for details
