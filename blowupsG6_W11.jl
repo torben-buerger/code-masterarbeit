@@ -136,6 +136,7 @@ function minimal_embedding(I::MPolyIdeal)
 end
 
 
+C, y, b = polynomial_ring(M, :y => (1:10), :b => (1:4));
 # Chart 1: b[1] = 1
 kernel_1 = ideal(C, union(gens(basis_blowup_ideal_11), [b[1] - 1]));
 minimal_vars_1, minimal_ideal_1, elim_rules_1 = minimal_embedding(kernel_1);
@@ -156,11 +157,11 @@ kernel_4 = ideal(C, union(gens(basis_blowup_ideal_11), [b[4] - 1]));
 minimal_vars_4, minimal_ideal_4, elim_rules_4 = minimal_embedding(kernel_4);
 print(minimal_vars_4);
 
-min_basis_1 = standard_basis(b_minimal_ideal_1, ordering=negdegrevlex(C));
+min_basis_1 = standard_basis(minimal_ideal_1, ordering=negdegrevlex(C));
 print(length(min_basis_1));
-min_basis_2 = standard_basis(b_minimal_ideal_2, ordering=negdegrevlex(C));
+min_basis_2 = standard_basis(minimal_ideal_2, ordering=negdegrevlex(C));
 print(length(min_basis_2));
-min_basis_3 = standard_basis(b_minimal_ideal_3, ordering=negdegrevlex(C));
+min_basis_3 = standard_basis(minimal_ideal_3, ordering=negdegrevlex(C));
 print(length(min_basis_3));
-min_basis_4 = standard_basis(b_minimal_ideal_4, ordering=negdegrevlex(C));
+min_basis_4 = standard_basis(minimal_ideal_4, ordering=negdegrevlex(C));
 print(length(min_basis_4));
