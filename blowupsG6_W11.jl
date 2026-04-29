@@ -66,7 +66,7 @@ print(embed_C(basis_blowup_ideal_11) == Rees_basis_ideal_11);  # Returns true
 # Check that the blowup ideal is homogeneous with respect to the b-variables, i.e., in the ring B[b_1,...,b_4], so the y-variables have degree 0
 # Note that this is done by evaluating all z-variables at 1 and checking homogeneity of the resulting polynomials in the b-variables because otherwise we would need to work 
 # in a graded polynomial ring which does not allow the non-homogeneous generators needed to analyze the charts later on
-b_part_kernel = [evaluate(gens(basis_blowup_11)[i], [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]) for i in eachindex(gens(kernel_blowup_map))];
+b_part_kernel = [evaluate(gens(basis_blowup_11)[i], [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]) for i in eachindex(gens(basis_blowup_ideal_11))];
 check_homogeneity = [is_homogeneous(b_part_kernel[i]) for i in eachindex(b_part_kernel)];  # Check that all generators are homogeneous with respect to the b-variables
 print(all(check_homogeneity));
 
