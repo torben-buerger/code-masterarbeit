@@ -60,3 +60,107 @@ blowup_ideal_11 = ideal(Aux_large_C, union([embed_B_1(rel) for rel in gens(relat
 Rees_rel_11 = eliminate(blowup_ideal_11, [t[1]]);  # Get a presentation of the Rees algebra which corresponds to the blowup in delta_11
 Rees_basis_11 = standard_basis(Rees_rel_11, ordering=negdegrevlex(Aux_large_C));  # Get a smaller generating set of the blowup ideal
 Rees_basis_ideal_11 = ideal(Aux_large_C, Rees_basis_11);
+print(embed_C(basis_blowup_ideal_11) == Rees_basis_ideal_11);  # Returns true
+
+
+# Check that the blowup ideal is homogeneous with respect to the b-variables, i.e., in the ring B[b_1,...,b_4], so the y-variables have degree 0
+# Note that this is done by evaluating all z-variables at 1 and checking homogeneity of the resulting polynomials in the b-variables because otherwise we would need to work 
+# in a graded polynomial ring which does not allow the non-homogeneous generators needed to analyze the charts later on
+b_part_kernel = [evaluate(gens(basis_blowup_11)[i], [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]) for i in eachindex(gens(kernel_blowup_map))];
+check_homogeneity = [is_homogeneous(b_part_kernel[i]) for i in eachindex(b_part_kernel)];  # Check that all generators are homogeneous with respect to the b-variables
+print(all(check_homogeneity));
+
+# Function that computes a minimal embedding of a given ideal by eliminating variables that appear linearly
+function minimal_embedding(I::MPolyIdeal)
+    R = base_ring(I)
+    # Work with a list of generators, that is modifidied during the process
+    current_gens = collect(gens(I))
+    
+    # Store the remaining varibales in a list
+    ring_vars = gens(R)
+    active_vars = collect(ring_vars)
+    
+    # Save the eliminated variables and their substitution expressions in a dictionary
+    eliminated_map = Dict{elem_type(R), elem_type(R)}()
+    
+    cleaning = true
+    while cleaning
+        cleaning = false  # Only set to true if we find a variable to eliminate
+        
+        # Iterate over the current generators to find a linear relation
+        for g in current_gens
+            if is_zero(g); continue; end
+            
+            found_v = nothing
+            subst_expr = nothing
+            
+            # Check each active variable for linearity in the chosen generator g
+            for v in active_vars
+                if degree(g, v) == 1
+                    c = derivative(g, v)  # Since g is linear in v, the derivative gives the coefficient (this is easier than extracting the coefficient as needed below)
+                    
+                    # We can only eliminate v if c is a non-zero constant
+                    if is_constant(c) && !is_zero(c)
+                        # Then we have c*v + rest = 0 => v = -rest/c and rest is everything in g except the term c*v
+                        rest = g - c*v 
+                        
+                        subst_expr = -rest * inv(c)
+                        found_v = v
+                        break  # We found a variable to eliminate and thus can break the inner for loop
+                    end
+                end
+            end
+            
+            if found_v !== nothing
+                eliminated_map[found_v] = subst_expr
+                filter!(x -> x != found_v, active_vars)
+                
+                # Search for the index of the variable that is set to be eliminated
+                idx = findfirst(isequal(found_v), ring_vars)
+                
+                new_gens = elem_type(R)[]
+                for poly in current_gens
+                    push!(new_gens, evaluate(poly, [idx], [subst_expr]))
+                end
+                current_gens = new_gens
+                
+                print("Eliminating variable: $(found_v)\n")
+                cleaning = true
+                break  # Restart the while Loop
+            end
+        end
+    end
+    
+    # Result: a triple of lists, consisting of the remaining variables, the ideal and the relations of the eliminations
+    return active_vars, ideal(R, current_gens), eliminated_map
+end
+
+
+# Chart 1: b[1] = 1
+kernel_1 = ideal(C, union(gens(basis_blowup_ideal_11), [b[1] - 1]));
+minimal_vars_1, minimal_ideal_1, elim_rules_1 = minimal_embedding(kernel_1);
+print(minimal_vars_1);
+
+# Chart 2: b[2] = 1
+kernel_2 = ideal(C, union(gens(basis_blowup_ideal_11), [b[2] - 1]));
+minimal_vars_2, minimal_ideal_2, elim_rules_2 = minimal_embedding(kernel_2);
+print(minimal_vars_2);
+
+# Chart 3: b[3] = 1
+kernel_3 = ideal(C, union(gens(basis_blowup_ideal_11), [b[3] - 1]));
+minimal_vars_3, minimal_ideal_3, elim_rules_3 = minimal_embedding(kernel_3);
+print(minimal_vars_1);
+
+# Chart 1: b[4] = 1
+kernel_4 = ideal(C, union(gens(basis_blowup_ideal_11), [b[4] - 1]));
+minimal_vars_4, minimal_ideal_4, elim_rules_4 = minimal_embedding(kernel_4);
+print(minimal_vars_4);
+
+min_basis_1 = standard_basis(b_minimal_ideal_1, ordering=negdegrevlex(C));
+print(length(min_basis_1));
+min_basis_2 = standard_basis(b_minimal_ideal_2, ordering=negdegrevlex(C));
+print(length(min_basis_2));
+min_basis_3 = standard_basis(b_minimal_ideal_3, ordering=negdegrevlex(C));
+print(length(min_basis_3));
+min_basis_4 = standard_basis(b_minimal_ideal_4, ordering=negdegrevlex(C));
+print(length(min_basis_4));
