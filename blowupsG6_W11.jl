@@ -137,25 +137,35 @@ end
 
 
 C, y, b = polynomial_ring(M, :y => (1:10), :b => (1:4));
+
+# In the following we will investigate the specific charts based on their ideals. We will take both generating the, the original large one and the one given by the standard_basis
 # Chart 1: b[1] = 1
 kernel_1 = ideal(C, union(gens(basis_blowup_ideal_11), [b[1] - 1]));
 minimal_vars_1, minimal_ideal_1, elim_rules_1 = minimal_embedding(kernel_1);
 print(minimal_vars_1);
+large_kernel_1 = ideal(C, union(gens(kernel_blowup_map_11), [b[1] - 1]));
+large_minimal_vars_1, large_minimal_ideal_1, large_elim_rules_1 = minimal_embedding(large_kernel_1);
 
 # Chart 2: b[2] = 1
 kernel_2 = ideal(C, union(gens(basis_blowup_ideal_11), [b[2] - 1]));
 minimal_vars_2, minimal_ideal_2, elim_rules_2 = minimal_embedding(kernel_2);
 print(minimal_vars_2);
+large_kernel_2 = ideal(C, union(gens(kernel_blowup_map_11), [b[2] - 1]));
+large_minimal_vars_2, large_minimal_ideal_2, large_elim_rules_2 = minimal_embedding(large_kernel_2);
 
 # Chart 3: b[3] = 1
 kernel_3 = ideal(C, union(gens(basis_blowup_ideal_11), [b[3] - 1]));
 minimal_vars_3, minimal_ideal_3, elim_rules_3 = minimal_embedding(kernel_3);
 print(minimal_vars_1);
+large_kernel_3 = ideal(C, union(gens(kernel_blowup_map_11), [b[3] - 1]));
+large_minimal_vars_3, large_minimal_ideal_3, large_elim_rules_3 = minimal_embedding(large_kernel_3);
 
 # Chart 1: b[4] = 1
 kernel_4 = ideal(C, union(gens(basis_blowup_ideal_11), [b[4] - 1]));
 minimal_vars_4, minimal_ideal_4, elim_rules_4 = minimal_embedding(kernel_4);
 print(minimal_vars_4);
+large_kernel_4 = ideal(C, union(gens(kernel_blowup_map_11), [b[4] - 1]));
+large_minimal_vars_4, large_minimal_ideal_4, large_elim_rules_4 = minimal_embedding(large_kernel_4);
 
 min_basis_1 = standard_basis(minimal_ideal_1, ordering=negdegrevlex(C));
 print(length(min_basis_1));
@@ -165,3 +175,43 @@ min_basis_3 = standard_basis(minimal_ideal_3, ordering=negdegrevlex(C));
 print(length(min_basis_3));
 min_basis_4 = standard_basis(minimal_ideal_4, ordering=negdegrevlex(C));
 print(length(min_basis_4));
+
+
+# Use the same functions as for G_4 to check, whether some chart is contained in another one
+function evaluate_variables(gen_list, idx)  # Note that the indices of b[1],...,b[4] are 11,...,14 in C
+    zeros_vec = zeros(Int, length(idx))
+    return [evaluate(gen_list[i], idx, zeros_vec) for i in eachindex(gen_list)]
+end
+
+function nonzero_constant_indices(gen_list)  # Returns the indices of non-zero constant generators, used to detect constant generators after evaluation
+    return [i for i in eachindex(gen_list)
+            if is_constant(gen_list[i]) && gen_list[i] != 0]
+end
+
+eval_1 = evaluate_variables(gens(minimal_ideal_1), [12, 13, 14]);
+nonzero_eval_gen_1 = nonzero_constant_indices(eval_1);  # Shows that there is no non-zero constant generator when all of b[2], b[3], and b[4] are set to 0
+print(nonzero_eval_gen_1);
+large_eval_1 = evaluate_variables(gens(large_minimal_ideal_1), [12, 13, 14]);
+nonzero_large_eval_gen_1 = nonzero_constant_indices(large_eval_1);  
+print(nonzero_large_eval_gen_1);
+
+eval_2 = evaluate_variables(gens(minimal_ideal_2), [11, 13, 14]);
+nonzero_eval_gen_2 = nonzero_constant_indices(eval_2);  # Shows that there is no non-zero constant generator when all of b[1], b[3], and b[4] are set to 0
+print(nonzero_eval_gen_2);
+large_eval_2 = evaluate_variables(gens(large_minimal_ideal_2), [11, 13, 14]);
+nonzero_large_eval_gen_2 = nonzero_constant_indices(large_eval_2);  
+print(nonzero_large_eval_gen_2);
+
+eval_3 = evaluate_variables(gens(minimal_ideal_3), [11, 12, 14]);
+nonzero_eval_gen_3 = nonzero_constant_indices(eval_3);  # Shows that there is no non-zero constant generator when all of b[1], b[2], and b[4] are set to 0
+print(nonzero_eval_gen_3);
+large_eval_3 = evaluate_variables(gens(large_minimal_ideal_3), [11, 12, 14]);
+nonzero_large_eval_gen_3 = nonzero_constant_indices(large_eval_3);  
+print(nonzero_large_eval_gen_3);
+
+eval_4 = evaluate_variables(gens(minimal_ideal_4), [11, 12, 13]);
+nonzero_eval_gen_4 = nonzero_constant_indices(eval_4);  # Shows that there is no non-zero constant generator when all of b[1], b[2], and b[3] are set to 0
+print(nonzero_eval_gen_4);
+large_eval_4 = evaluate_variables(gens(large_minimal_ideal_4), [11, 12, 13]);
+nonzero_large_eval_gen_4 = nonzero_constant_indices(large_eval_4);  
+print(nonzero_large_eval_gen_4);
