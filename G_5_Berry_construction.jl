@@ -1,0 +1,213 @@
+using Oscar
+Q_t, t = polynomial_ring(QQ, :t);
+K, zeta = number_field(t^8 - t^4 + 1, "zeta");
+i = zeta^6;      # imaginary unit
+sigma = zeta^8;  # primitive third root of unity
+q2 = zeta^3 + zeta^(-3); # sqrt(2)
+q3 = zeta^8 - zeta^(-8); # sqrt(3)
+
+# Matrix representations of generators of the group G_5 as subgroup of GL_2(CC)
+a = matrix(K, 2, 2, [i 0; 0 -i]);
+b = matrix(K, 2, 2, [0 1; -1 0]);
+c = matrix(K, 2, 2, [zeta//q2 (-zeta)//q2; (i*zeta)//q2 (i*zeta)//q2]);
+d = matrix(K, 2, 2, [sigma, 0, 0, sigma]);
+
+c_conj = a*c*d^2
+
+G_5 = matrix_group([a, b, c, c_conj]);
+describe(G_5);
+
+conj = conjugacy_classes(G_5);
+
+# Compute the corresponding symplectic reflection group
+a_symp = block_diagonal_matrix([a, transpose(inv(a))]);
+b_symp = block_diagonal_matrix([b, transpose(inv(b))]);
+c_symp = block_diagonal_matrix([c, transpose(inv(c))]);
+d_symp = block_diagonal_matrix([d, transpose(inv(d))]);
+c_conj_symp = block_diagonal_matrix([c_conj, transpose(inv(c_conj))]);
+G_5_symp = matrix_group([a_symp, b_symp, c_symp, c_conj_symp]);
+describe(G_5_symp);
+
+R, x = polynomial_ring(K, :x => (1:4));
+# Eigenvectors of c_symp and c_conj_symp for the eigenvalues 1, sigma, and sigma^2 according to Berry
+F11 = x[1]*x[3] + x[2]*x[4];
+F40 = x[1]^4 + x[2]^4 - 2*q3*x[1]^2*x[2]^2;
+F31 = x[1]^3*x[4] - q3*x[1]^2*x[2]*x[3] + q3*x[1]*x[2]^2*x[4] - x[2]^3*x[3];
+G22 = x[1]^2*x[3]^2 + q3*x[2]^2*x[3]^2 + q3*x[1]^2*x[4]^2 + x[2]^2*x[4]^2 - 4*x[1]*x[2]*x[3]*x[4];
+F13 = x[1]*x[4]^3 + q3*x[2]*x[3]*x[4]^2 - q3*x[1]*x[3]^2*x[4] - x[2]*x[3]^3;
+F04 = x[3]^4 + x[4]^4 + 2*q3*x[3]^2*x[4]^2;
+F60 = x[1]^5*x[2] - x[1]*x[2]^5;
+G51 = x[1]^5*x[3] - 5*x[1]^4*x[2]*x[4] - 5*x[1]*x[2]^4*x[3] + x[2]^5*x[4];
+G42 = x[1]^4*x[3]*x[4] - 2*x[1]^3*x[2]*x[4]^2 + 2*x[1]*x[2]^3*x[3]^2 - x[2]^4*x[3]*x[4];
+F33 = x[1]^3*x[3]*x[4]^2 - x[1]^2*x[2]*x[4]^3 - x[1]*x[2]^2*x[3]^3 + x[2]^3*x[3]^2*x[4];
+G24 = 2*x[1]^2*x[3]*x[4]^3 + x[1]*x[2]*x[3]^4 - x[1]*x[2]*x[4]^4 - 2*x[2]^2*x[3]^3*x[4];
+G15 = x[1]*x[3]^5 - 5*x[1]*x[3]*x[4]^4 - 5*x[2]*x[3]^4*x[4] + x[2]*x[4]^5;
+F06 = x[3]^5*x[4] - x[3]*x[4]^5;
+
+# Define a function that mimics the complex conjugation
+f_conj = hom(K, K, -zeta^7+zeta^3);
+function conj_poly(poly)
+    return map_coefficients(f_conj, poly)
+end
+
+F40_conj = conj_poly(F40);
+F31_conj = conj_poly(F31);
+G22_conj = conj_poly(G22);
+F13_conj = conj_poly(F13);
+F04_conj = conj_poly(F04);
+
+gen_list = [F11, F40, F31, G22, F13, F04, F60, G51, G42, F33, G24, G15, F06, F40_conj, F31_conj, G22_conj, F13_conj, F04_conj];
+gen_ideal = ideal(R, gen_list);
+
+# Invariants as given by Berry
+B1 = -F40*F31 - F40_conj*F31_conj;
+B0 = F31*F13 + F31_conj*F13_conj;
+Bneg1 = -F13*F04 - F13_conj*F04_conj;
+C2 = F40^3 + F40_conj^3;
+C1 = -F31^3 - F31_conj^3;
+C0 = F40*F13^2 + F40_conj*F13_conj^2 + 4*F11^3*F33;
+Cneg1 = -F13^3 - F13_conj^3;
+Cneg2 = F04^3 + F04_conj^3;
+h = F11;
+A1 = 6*F60;
+A0 = 3*F33;
+Aneg1 = 6*F06;
+
+invars_ideal = ideal(R, [h, A1, A0, Aneg1, B1, B0, Bneg1, C2, C1, C0, Cneg1, Cneg2]);
+
+# We define the polynomial ring of which the invariant ring is the quotient by dividing out the relations ideal, for simplicity, we use y[1], ..., y[12] as variables instead of (y_h, y_A1, y_A0, y_Aneg1, y_B1, y_B0, y_Bneg1, y_C2, y_C1, y_C0, y_Cneg1, y_Cneg2)
+S, y = polynomial_ring(K, :y => (1:12));
+
+# The map pi_1 maps the variables y[1], ..., y[12] to the invariants h, A1, A0, Aneg1, B1, B0, Bneg1, C2, C1, C0, Cneg1, Cneg2
+pi_1 = hom(S, R, [h, A1, A0, Aneg1, B1, B0, Bneg1, C2, C1, C0, Cneg1, Cneg2]);
+
+# We make use of the relations given by Berry
+relations_ideal = ideal(S, [
+    2*y[2]*y[4] - 2*y[3]^2 + 9*y[1]^2*y[6],
+    y[2]*y[6] - y[3]*y[5] + 3*y[1]*y[9],
+    y[4]*y[6] - y[3]*y[7] - 3*y[1]*y[11],
+    y[2]*y[7] - y[3]*y[6] + 3*y[1]*y[10] + 2*y[1]^4*y[3],
+    y[4]*y[5] - y[3]*y[6] - 3*y[1]*y[10] + 2*y[1]^4*y[3],
+    2*y[5]*y[7] - 2*y[6]^2 - 6*y[1]^2*y[3]^2 - y[1]^4*y[6],
+    6*y[2]*y[9] - 6*y[3]*y[8] + 9*y[1]*y[5]^2 - y[1]^3*y[2]^2,
+    6*y[4]*y[11] - 6*y[3]*y[12] - 9*y[1]*y[7]^2 + y[1]^3*y[4]^2,
+    6*y[2]*y[10] - 6*y[3]*y[9] + 9*y[1]*y[5]*y[6] - 4*y[1]^3*y[2]*y[3],
+    6*y[4]*y[10] - 6*y[3]*y[11] - 9*y[1]*y[7]*y[6] + 4*y[1]^3*y[4]*y[3],
+    6*y[2]*y[11] - 6*y[3]*y[10] + 9*y[1]*y[6]^2 - 4*y[1]^3*y[3]^2,
+    6*y[4]*y[9] - 6*y[3]*y[10] - 9*y[1]*y[6]^2 + 4*y[1]^3*y[3]^2,
+    6*y[2]*y[12] - 6*y[3]*y[11] + 9*y[1]*y[6]*y[7] - 28*y[1]^3*y[3]*y[4] - 36*y[1]^5*y[7],
+    6*y[4]*y[8] - 6*y[3]*y[9] - 9*y[1]*y[6]*y[5] + 28*y[1]^3*y[3]*y[2] + 36*y[1]^5*y[5],
+    3*y[5]*y[9] - 3*y[6]*y[8] + 3*y[1]*y[2]^2*y[3] + 4*y[1]^3*y[2]*y[5],
+    3*y[7]*y[11] - 3*y[6]*y[12] - 3*y[1]*y[4]^2*y[3] - 4*y[1]^3*y[4]*y[7],
+    6*y[5]*y[10] - 6*y[6]*y[9] + 6*y[1]*y[2]*y[3]^2 + 4*y[1]^3*y[3]*y[5] + y[1]^3*y[2]*y[6],
+    6*y[7]*y[10] - 6*y[6]*y[11] - 6*y[1]*y[4]*y[3]^2 - 4*y[1]^3*y[3]*y[7] - y[1]^3*y[4]*y[6],
+    6*y[5]*y[11] - 6*y[6]*y[10] + 6*y[1]*y[3]^3 + 5*y[1]^3*y[3]*y[6],
+    6*y[7]*y[9] - 6*y[6]*y[10] - 6*y[1]*y[3]^3 - 5*y[1]^3*y[3]*y[6],
+    6*y[5]*y[12] - 6*y[6]*y[11] + 6*y[1]*y[3]^2*y[4] + 35*y[1]^3*y[4]*y[6] - 84*y[1]^4*y[11] + 4*y[1]^7*y[4],
+    6*y[7]*y[8] - 6*y[6]*y[9] - 6*y[1]*y[3]^2*y[2] - 35*y[1]^3*y[2]*y[6] - 84*y[1]^4*y[9] - 4*y[1]^7*y[2],
+    36*y[8]*y[10] - 36*y[9]^2 + 54*y[1]^2*y[2]*y[3]*y[5] - 18*y[1]^3*y[8]*y[3] + 63*y[1]^4*y[5]^2 + y[1]^6*y[2]^2,
+    36*y[12]*y[10] - 36*y[11]^2 + 54*y[1]^2*y[4]*y[3]*y[7] + 18*y[1]^3*y[12]*y[3] + 63*y[1]^4*y[7]^2 + y[1]^6*y[4]^2,
+    9*y[8]*y[11] - 9*y[9]*y[10] + 27*y[1]^2*y[2]*y[3]*y[6] + 36*y[1]^3*y[9]*y[3] + 18*y[1]^4*y[5]*y[6] + 2*y[1]^6*y[2]*y[3],
+    9*y[12]*y[9] - 9*y[11]*y[10] + 27*y[1]^2*y[4]*y[3]*y[6] - 36*y[1]^3*y[11]*y[3] + 18*y[1]^4*y[7]*y[6] + 2*y[1]^6*y[4]*y[3],
+    2*y[8]*y[12] - 2*y[9]*y[11] + 9*y[1]^2*y[2]*y[4]*y[6] + 48*y[1]^4*y[6]^2 + 32*y[1]^6*y[2]*y[4] + 132*y[1]^8*y[6] - 8*y[1]^12,
+    18*y[9]*y[11] - 18*y[10]^2 + 27*y[1]^2*y[2]*y[4]*y[6] + 126*y[1]^4*y[6]^2 + 8*y[1]^6*y[3]^2,
+    6*y[8]*y[9] - 3*y[5]^3 + 2*y[2]^3*y[3] + 3*y[1]^2*y[2]^2*y[5],
+    6*y[12]*y[11] - 3*y[7]^3 + 2*y[4]^3*y[3] + 3*y[1]^2*y[4]^2*y[7],
+    6*y[9]^2 - 3*y[5]^2*y[6] + 2*y[2]^3*y[4] + 12*y[1]^2*y[2]*y[3]*y[5] - 28*y[1]^3*y[2]*y[9],
+    6*y[11]^2 - 3*y[7]^2*y[6] + 2*y[4]^3*y[2] + 12*y[1]^2*y[4]*y[3]*y[7] + 28*y[1]^3*y[4]*y[11],
+    6*y[9]*y[10] - 3*y[5]*y[6]^2 + 2*y[2]*y[3]^3 + 3*y[1]^2*y[2]*y[3]*y[6] + 4*y[1]^3*y[3]*y[9],
+    6*y[11]*y[10] - 3*y[7]*y[6]^2 + 2*y[4]*y[3]^3 + 3*y[1]^2*y[4]*y[3]*y[6] - 4*y[1]^3*y[3]*y[11],
+    18*y[10]^2 - 9*y[5]*y[6]*y[7] + 6*y[3]^4 + 9*y[1]^2*y[3]^2*y[6] - 8*y[1]^6*y[3]^2
+]);
+
+# Define the quotient ring of S by the relations ideal which is isomorphic to the invariant ring of G_5_symp and thus is the coordinate ring of C^4/G_5_symp
+S_quo, quo_map = quo(S, relations_ideal);
+
+
+# The blowup will be computed in the ideal corresponding to the singular locus which is given by the following semi invariants
+R44 = G22*G22_conj;
+R93 = F31*F40_conj*G22_conj;
+R93prime = F40*F31_conj*G22;
+R66 = F04*F40_conj*G22_conj;
+R66prime = F40*F04_conj*G22;
+R39 = F04*F13_conj*G22_conj;
+R39prime = F13*F04_conj*G22;
+R131 = F40*F40_conj*G51;
+R113 = F04*F04_conj*G15;
+R142 = F40*F31*F40_conj*F31_conj;
+R214 = F13*F04*F13_conj*F04_conj;
+R191 = F40*F31*F40_conj^3;
+R119 = F13*F04*F04_conj^3;
+R240 = F40^3*F40_conj^3;
+R024 = F04^3*F04_conj^3;
+
+blowup_ideal = ideal(R, [R44, R93, R93prime, R66, R66prime, R39, R39prime, R131, R113, R142, R214, R191, R119, R240, R024]);
+
+# As we want to reconstruct this ideal, we follow the steps explained by Berry: The singular locus is the set of points that are fixed by non-trivial elements of G_5.
+# In this case, these are only the symplectic reflections and thus we compute their eigenvectors which form the basis of the fixed point spaces. To do so, we determine the conjugacy classes consisting of symplectic reflections in G_5
+conj_symp = conjugacy_classes(G_5_symp);
+eigenvals = [eigenvalues(matrix(representative(c))) for c in conj_symp];
+
+ref_1_list = collect(conj_symp[11]);
+ref_2_list = collect(conj_symp[12]);
+ref_3_list = collect(conj_symp[16]);
+ref_4_list = collect(conj_symp[17]);
+
+# Note that we have to compute the eigenspaces of the transpose matrix as the defintion of an eigenvector in OSCAR is v*A = lambda*v
+ref_1_eigvecs = [eigenspaces(transpose(matrix(m))) for m in ref_1_list];
+ref_2_eigvecs = [eigenspaces(transpose(matrix(m))) for m in ref_2_list];
+ref_3_eigvecs = [eigenspaces(transpose(matrix(m))) for m in ref_3_list];
+ref_4_eigvecs = [eigenspaces(transpose(matrix(m))) for m in ref_4_list];
+
+# The eigenvectors for the eigenvalue 1 have the form [v_1, v_2, 0, 0] and [0, 0, w_3, w_4] whence we combine them to a common vector to check which of the semi invariants in gen_list vanish after plugging them in
+ref_1_vecs = [[ref_1_eigvecs[i][K(1)][1, 1], ref_1_eigvecs[i][K(1)][1, 2], ref_1_eigvecs[i][K(1)][2, 3], ref_1_eigvecs[i][K(1)][2, 4]] for i in 1:4];
+ref_2_vecs = [[ref_2_eigvecs[i][K(1)][1, 1], ref_2_eigvecs[i][K(1)][1, 2], ref_2_eigvecs[i][K(1)][2, 3], ref_2_eigvecs[i][K(1)][2, 4]] for i in 1:4];
+ref_3_vecs = [[ref_3_eigvecs[i][K(1)][1, 1], ref_3_eigvecs[i][K(1)][1, 2], ref_3_eigvecs[i][K(1)][2, 3], ref_3_eigvecs[i][K(1)][2, 4]] for i in 1:4];
+ref_4_vecs = [[ref_4_eigvecs[i][K(1)][1, 1], ref_4_eigvecs[i][K(1)][1, 2], ref_4_eigvecs[i][K(1)][2, 3], ref_4_eigvecs[i][K(1)][2, 4]] for i in 1:4];
+
+# Small function to find the zero indices after evaluating the polynomials in gen_list at these vectors
+function zero_indices(v)
+    return [i for (i, x) in enumerate(v) if x == 0]
+end
+
+vanishing_semi_invars_1 = [zero_indices([evaluate(p, v) for p in gen_list]) for v in ref_1_vecs];
+vanishing_semi_invars_2 = [zero_indices([evaluate(p, v) for p in gen_list]) for v in ref_2_vecs];
+vanishing_semi_invars_3 = [zero_indices([evaluate(p, v) for p in gen_list]) for v in ref_3_vecs];
+vanishing_semi_invars_4 = [zero_indices([evaluate(p, v) for p in gen_list]) for v in ref_4_vecs];
+
+# In each of the lists, the vectors vanish on the same set of semi invariants, thus is suffices to take the intersection of the first entries to get the ideals of semi invariants vanishing on all the fixes subspaces
+v_ideal_1 = ideal(R, gen_list[vanishing_semi_invars_1[1]]);
+v_ideal_2 = ideal(R, gen_list[vanishing_semi_invars_2[1]]);
+v_ideal_3 = ideal(R, gen_list[vanishing_semi_invars_3[1]]);
+v_ideal_4 = ideal(R, gen_list[vanishing_semi_invars_4[1]]);
+
+intersection_ideal = intersect(v_ideal_1, v_ideal_2, v_ideal_3, v_ideal_4);
+
+# As mentioned in the paper by Berry, the blowup_ideal is given as a radical ideal in the invariant ring. Therefore we have to compare the ideals in S_quo, which is why it is at first necessary to compute preimages in S
+pre_blowup_ideal = preimage(pi_1, blowup_ideal);
+quo_blowup_ideal = quo_map(pre_blowup_ideal);
+rad_quo_blowup_ideal = radical(quo_blowup_ideal);
+print(rad_quo_blowup_ideal == quo_blowup_ideal);  # Returns true, which shows that the ideal is indeed radical
+
+pre_intersection_ideal = preimage(pi_1, intersection_ideal);
+quo_intersection_ideal = quo_map(pre_intersection_ideal);
+rad_quo_intersection_ideal = radical(quo_intersection_ideal);
+print(rad_quo_intersection_ideal == quo_intersection_ideal);  # Returns true, which shows that the ideal is indeed radical
+
+print(quo_blowup_ideal == quo_intersection_ideal);  # Returns true, so we have found the ideal in which blowup is computed by Berry
+
+# We try to find a smaller generating set and an expression in the semi invariants similar to the one given by Berry
+intersection_basis = standard_basis(pre_intersection_ideal, ordering=negdegrevlex(S));
+quo_intersection_basis = [simplify(quo_map(b)) for b in intersection_basis];
+test_quo_intersection_ideal = ideal(S_quo, quo_intersection_basis[[1:6; 8:9; 12; 15; 17; 20; 22; 26; 28]]);
+print(test_quo_intersection_ideal == quo_intersection_ideal);  # Returns true, so the intersection ideal is generated by 15 elements of S_quo
+
+lifted_intersection_ideal = ideal(S, [2*y[1]^4 + 3*y[6], -y[1]^3*y[2] + 3*y[9], y[10], y[1]^3*y[4] + 3*y[11], y[1]^2*y[5] + y[2]*y[3],
+  y[2]*y[4] + 8*y[3]^2, y[1]^2*y[7] + y[3]*y[4], y[1]*y[8] + y[2]*y[5], y[1]^2*y[2]^2 + 3*y[5]^2, -y[1]*y[12] + y[4]*y[7],
+  y[1]^2*y[4]^2 + 3*y[7]^2, -y[1]*y[2]^3 + 3*y[5]*y[8], y[2]^4 + 3*y[8]^2, y[1]*y[4]^3 + 3*y[7]*y[12], y[4]^4 + 3*y[12]^2]);  # Take the representatives of the residue classes that form a smaller generating set of the intersection ideal as elements of S to be able to map them to R
+image_intersection_gens = [pi_1(gen) for gen in gens(lifted_intersection_ideal)];  
+
+# Define an auxilliary ring where each variable represents one of the semi invariants and a projection to R used to find preimages of the ideal generators
+Aux_gen, z = polynomial_ring(K, :z => (1:18));  
+pi_2 = hom(Aux_gen, R, gen_list);
+gens_preimages = [has_preimage_with_preimage(pi_2, p) for p in gen_list];
