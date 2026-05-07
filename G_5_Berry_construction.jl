@@ -210,4 +210,56 @@ image_intersection_gens = [pi_1(gen) for gen in gens(lifted_intersection_ideal)]
 # Define an auxilliary ring where each variable represents one of the semi invariants and a projection to R used to find preimages of the ideal generators
 Aux_gen, z = polynomial_ring(K, :z => (1:18));  
 pi_2 = hom(Aux_gen, R, gen_list);
-gens_preimages = [has_preimage_with_preimage(pi_2, p) for p in gen_list];
+gens_preimages = [has_preimage_with_preimage(pi_2, p) for p in image_intersection_gens];
+
+gen_preimages_ideal = ideal(Aux_gen, [2*z[14]*z[18] + 4*z[15]*z[17],
+ (-4*zeta^4 + 2)*z[3]*z[14]*z[16] + (4*zeta^4 - 2)*z[8]*z[9],
+ (-4//3*zeta^4 + 2//3)*z[2]*z[4]*z[18] + (4//3*zeta^4 - 2//3)*z[8]*z[12] + (8*zeta^4 - 4)*z[9]*z[11],
+ (4*zeta^4 - 2)*z[4]*z[5]*z[18] + (4*zeta^4 - 2)*z[11]*z[12],
+ -2*z[8]*z[9],
+ 36*z[9]*z[11],
+ 2*z[11]*z[12],
+ 2*z[2]*z[8]*z[14],
+ (-48*zeta^4 + 24)*z[1]*z[7]*z[14]*z[15] + 12*z[14]^2*z[15]^2,
+ -2*z[6]*z[12]*z[18],
+ (-48*zeta^4 + 24)*z[1]*z[13]*z[17]*z[18] + 12*z[17]^2*z[18]^2,
+ (24*zeta^4 - 12)*z[2]*z[7]*z[8]*z[14] + (288*zeta^4 - 144)*z[7]^2*z[14]*z[15] - 12*z[14]^4*z[15],
+ (-288*zeta^4 + 144)*z[7]^2*z[14]^3 + 12*z[14]^6,
+ (24*zeta^4 - 12)*z[6]*z[12]*z[13]*z[18] + (-288*zeta^4 + 144)*z[13]^2*z[17]*z[18] - 12*z[17]*z[18]^4,
+ (288*zeta^4 - 144)*z[13]^2*z[18]^3 + 12*z[18]^6]);
+gen_basis = standard_basis(gen_preimages_ideal, ordering = negdegrevlex(Aux_gen));
+
+# We can simplify the generators and obtain the following ideal
+gen_preimages_simple = ideal(Aux_gen, [z[14]*z[18] + 2*z[15]*z[17],
+ z[3]*z[14]*z[16],
+ z[2]*z[4]*z[18] - z[8]*z[12],
+ z[4]*z[5]*z[18],
+ z[8]*z[9],
+ z[9]*z[11],
+ z[11]*z[12],
+ z[2]*z[8]*z[14],
+ z[14]*z[15]*(z[14]*z[15] - (4*zeta^4 - 2)*z[1]*z[7]),
+ z[6]*z[12]*z[18],
+ z[17]*z[18]*(z[17]*z[18] - (4*zeta^4 - 2)*z[1]*z[13]),
+ z[14]*((2*zeta^4 - 1)*z[2]*z[7]*z[8] + (24*zeta^4 - 12)*z[7]^2*z[15] - z[14]^3*z[15]),
+ z[14]^3*(z[14]^3 - (24*zeta^4 - 12)*z[7]^2),
+ z[18]*((2*zeta^4 - 1)*z[6]*z[12]*z[13]  - (24*zeta^4 - 12)*z[13]^2*z[17]  - z[17]*z[18]^3),
+ z[18]^3*((24*zeta^4 - 12)*z[13]^2 + z[18]^3)]);
+print(gen_preimages_ideal == gen_preimages_simple);  # Returns true
+
+# In the semi invariants we can thus express this ideal by
+semi_invars_gens = [F40_conj*F04_conj + 2*F31_conj*F13_conj,
+ F31*F40_conj*G22_conj,
+ F40*G22*F04_conj - G51*G15,
+ G22*F13*F04_conj,
+ G51*G42,
+ G42*G24,
+ G24*G15,
+ F40*G51*F40_conj,
+ F40_conj*F31_conj*(F40_conj*F31_conj - (4*zeta^4 - 2)*F11*F60),
+ F04*G15*F04_conj,
+ F13_conj*F04_conj*(F13_conj*F04_conj - (4*zeta^4 - 2)*F11*F06),
+ F40_conj*( (2*zeta^4 - 1)*F40*F60*G51 + (24*zeta^4 - 12)*F60^2*F31_conj - F40_conj^3*F31_conj),
+ F40_conj^3*(F40_conj^3 - (24*zeta^4 - 12)*F60^2),
+ F04_conj*((2*zeta^4 - 1)*F04*G15*F06 - (24*zeta^4 - 12)*F06^2*F13_conj - F13_conj*F04_conj^3),
+ F04_conj^3*((24*zeta^4 - 12)*F06^2 + F04_conj^3)];
