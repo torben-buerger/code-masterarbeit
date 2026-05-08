@@ -169,12 +169,16 @@ large_minimal_vars_4, large_minimal_ideal_4, large_elim_rules_4 = minimal_embedd
 
 min_basis_1 = standard_basis(minimal_ideal_1, ordering=negdegrevlex(C));
 print(length(min_basis_1));
+b_minimal_ideal_1 = ideal(C, min_basis_1);
 min_basis_2 = standard_basis(minimal_ideal_2, ordering=negdegrevlex(C));
 print(length(min_basis_2));
+b_minimal_ideal_2 = ideal(C, min_basis_2);
 min_basis_3 = standard_basis(minimal_ideal_3, ordering=negdegrevlex(C));
 print(length(min_basis_3));
+b_minimal_ideal_3 = ideal(C, min_basis_3);
 min_basis_4 = standard_basis(minimal_ideal_4, ordering=negdegrevlex(C));
 print(length(min_basis_4));
+b_minimal_ideal_4 = ideal(C, min_basis_4);
 
 
 # Use the same functions as for G_4 to check, whether some chart is contained in another one
@@ -215,3 +219,22 @@ print(nonzero_eval_gen_4);
 large_eval_4 = evaluate_variables(gens(large_minimal_ideal_4), [11, 12, 13]);
 nonzero_large_eval_gen_4 = nonzero_constant_indices(large_eval_4);  
 print(nonzero_large_eval_gen_4);
+
+
+# We compute the radicals of the ideals inducing the affine charts
+rad_chart_1 = radical(b_minimal_ideal_1);
+rad_chart_2 = radical(b_minimal_ideal_2);
+rad_chart_3 = radical(b_minimal_ideal_3);
+rad_chart_4 = radical(b_minimal_ideal_4);
+
+# We define the varieties corresponding to the charts to be able to compute their singular loci
+X_1 = spec(C, rad_chart_1);
+X_2 = spec(C, rad_chart_2);
+X_3 = spec(C, rad_chart_3);
+X_4 = spec(C, rad_chart_4);
+
+sing_1 = singular_locus(X_1);
+sing_1_ideal = modulus(OO(sing_1[1]));
+sing_2_ideal = modulus(OO(sing_2[1]));
+sing_3_ideal = modulus(OO(sing_3[1]));
+sing_4_ideal = modulus(OO(sing_4[1]));
