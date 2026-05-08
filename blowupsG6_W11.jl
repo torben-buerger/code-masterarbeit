@@ -234,6 +234,9 @@ X_3 = spec(C, rad_chart_3);
 X_4 = spec(C, rad_chart_4);
 
 sing_1 = singular_locus(X_1);
+sing_2 = singular_locus(X_2);
+sing_3 = singular_locus(X_3);
+sing_4 = singular_locus(X_4);
 sing_1_ideal = modulus(OO(sing_1[1]));
 sing_2_ideal = modulus(OO(sing_2[1]));
 sing_3_ideal = modulus(OO(sing_3[1]));
