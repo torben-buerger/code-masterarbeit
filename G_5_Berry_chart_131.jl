@@ -150,121 +150,93 @@ print(ideal_membership(B0*R131^4, ideal_B0));
 coeffs_B0 = coordinates(B0*R131^4, ideal_B0);
 print((monomials_B0*transpose(coeffs_B0))[1] == B0*R131^4);
 
-# 6. Bneg1 of bidegree (1,7)
+# 5. Bneg1 of bidegree (1,7)
 monomials_Bneg1 = get_bidegree_monomials(1,7);
 ideal_Bneg1 = ideal(R, monomials_Bneg1);
 print(ideal_membership(Bneg1*R131^7, ideal_Bneg1));
 coeffs_Bneg1 = coordinates(Bneg1*R131^7, ideal_Bneg1);
 print((monomials_Bneg1*transpose(coeffs_Bneg1))[1] == Bneg1*R131^7);
 
-# 7. C1 of bidegree (9,3)
+# 6. C1 of bidegree (9,3)
 monomials_C1 = get_bidegree_monomials(9,3);
 ideal_C1 = ideal(R, monomials_C1);
 print(ideal_membership(C1*R131^3, ideal_C1));
 coeffs_C1 = coordinates(C1*R131^3, ideal_C1);
 print((monomials_C1*transpose(coeffs_C1))[1] == C1*R131^3);
 
-# 8. C0 of bidegree (6,6)
+# 7. C0 of bidegree (6,6)
 monomials_C0 = get_bidegree_monomials(6,6);
 ideal_C0 = ideal(R, monomials_C0);
 print(ideal_membership(C0*R131^6, ideal_C0));
 coeffs_C0 = coordinates(C0*R131^6, ideal_C0);
 print((monomials_C0*transpose(coeffs_C0))[1] == C0*R131^6);
 
-# 9. Cneg1 of bidegree (3,9)
+# 8. Cneg1 of bidegree (3,9)
 monomials_Cneg1 = get_bidegree_monomials(3,9);
 ideal_Cneg1 = ideal(R, monomials_Cneg1);
 print(ideal_membership(Cneg1*R131^9, ideal_Cneg1));
 coeffs_Cneg1 = coordinates(Cneg1*R131^9, ideal_Cneg1);
 print((monomials_Cneg1*transpose(coeffs_Cneg1))[1] == Cneg1*R131^9);
 
-# 10. Cneg2 of bidegree (0,12)
+# 9. Cneg2 of bidegree (0,12)
 monomials_Cneg2 = get_bidegree_monomials(0,12);
 ideal_Cneg2 = ideal(R, monomials_Cneg2);
 print(ideal_membership(Cneg2*R131^12, ideal_Cneg2));
 coeffs_Cneg2 = coordinates(Cneg2*R131^12, ideal_Cneg2);
 print((monomials_Cneg2*transpose(coeffs_Cneg2))[1] == Cneg2*R131^12);
 
-# 11. R44/R131 of bidegree (-20,4)
-monomials_R44 = get_bidegree_monomials(-20,4);
-ideal_R44 = ideal(R, monomials_R44);
-print(ideal_membership(R44*R131^3, ideal_R44));
-coeffs_R44 = coordinates(R44*R131^3, ideal_R44);
-print((monomials_R44*transpose(coeffs_R44))[1] == R44*R131^3);
-
-# 12. R93/R131 of bidegree (-15,3)
-monomials_R93 = get_bidegree_monomials(-15,3);
-ideal_R93 = ideal(R, monomials_R93);
-print(ideal_membership(R93*R131^2, ideal_R93));
-coeffs_R93 = coordinates(R93*R131^2, ideal_R93);
-print((monomials_R93*transpose(coeffs_R93))[1] == R93*R131^2);
-
-# 13. R93prime/R131 of bidegree (-15,3)
-monomials_R93prime = get_bidegree_monomials(-15,3);
-ideal_R93prime = ideal(R, monomials_R93prime);
-print(ideal_membership(R93prime*R131^2, ideal_R93prime));
-coeffs_R93prime = coordinates(R93prime*R131^2, ideal_R93prime);
-print((monomials_R93prime*transpose(coeffs_R93prime))[1] == R93prime*R131^2);
-
-# 14. R66/R131 of bidegree (-18,6)
-monomials_R66 = get_bidegree_monomials(-18,6);
+# 10. R66/R131 of bidegree (-7,5)
+monomials_R66 = get_bidegree_monomials(-7,5);
 ideal_R66 = ideal(R, monomials_R66);
-print(ideal_membership(R66*R131^5, ideal_R66));
-coeffs_R66 = coordinates(R66*R131^5, ideal_R66);
-print((monomials_R66*transpose(coeffs_R66))[1] == R66*R131^5);
+print(ideal_membership(R66*R131^4, ideal_R66));
+coeffs_R66 = coordinates(R66*R131^4, ideal_R66);
+print((monomials_R66*transpose(coeffs_R66))[1] == R66*R131^4);
 
-# 15. R66prime/R131 of bidegree (-18,6)
-monomials_R66prime = get_bidegree_monomials(-18,6);
+# 11. R66prime/R131 of bidegree (-7,5)
+monomials_R66prime = get_bidegree_monomials(-7,5);
 ideal_R66prime = ideal(R, monomials_R66prime);
-print(ideal_membership(R66prime*R131^5, ideal_R66prime));
-coeffs_R66prime = coordinates(R66prime*R131^5, ideal_R66prime);
-print((monomials_R66prime*transpose(coeffs_R66prime))[1] == R66prime*R131^5);
+print(ideal_membership(R66prime*R131^4, ideal_R66prime));
+coeffs_R66prime = coordinates(R66prime*R131^4, ideal_R66prime);
+print((monomials_R66prime*transpose(coeffs_R66prime))[1] == R66prime*R131^4);
 
-# 16. R39/R131 of bidegree (-21,9)
-monomials_R39 = get_bidegree_monomials(-21,9);
+# 12. R39/R131 of bidegree (-10,8)
+monomials_R39 = get_bidegree_monomials(-10,8);
 ideal_R39 = ideal(R, monomials_R39);
-print(ideal_membership(R39*R131^8, ideal_R39));
-coeffs_R39 = coordinates(R39*R131^8, ideal_R39);
-print((monomials_R39*transpose(coeffs_R39))[1] == R39*R131^8);
+print(ideal_membership(R39*R131^7, ideal_R39));
+coeffs_R39 = coordinates(R39*R131^7, ideal_R39);
+print((monomials_R39*transpose(coeffs_R39))[1] == R39*R131^7);
 
-# 17. R39prime/R131 of bidegree (-21,9)
-monomials_R39prime = get_bidegree_monomials(-21,9);
+# 13. R39prime/R131 of bidegree (-10,8)
+monomials_R39prime = get_bidegree_monomials(-10,8);
 ideal_R39prime = ideal(R, monomials_R39prime);
-print(ideal_membership(R39prime*R131^8, ideal_R39prime));
-coeffs_R39prime = coordinates(R39prime*R131^8, ideal_R39prime);
-print((monomials_R39prime*transpose(coeffs_R39prime))[1] == R39prime*R131^8);
+print(ideal_membership(R39prime*R131^7, ideal_R39prime));
+coeffs_R39prime = coordinates(R39prime*R131^7, ideal_R39prime);
+print((monomials_R39prime*transpose(coeffs_R39prime))[1] == R39prime*R131^7);
 
-# 18. R113/R131 of bidegree (-23,13)
-monomials_R113 = get_bidegree_monomials(-23,13);
+# 14. R113/R131 of bidegree (-12,12)
+monomials_R113 = get_bidegree_monomials(-12,12);
 ideal_R113 = ideal(R, monomials_R113);
-print(ideal_membership(R113*R131^12, ideal_R113));
-coeffs_R113 = coordinates(R113*R131^12, ideal_R113);
-print((monomials_R113*transpose(coeffs_R113))[1] == R113*R131^12);
+print(ideal_membership(R113*R131^11, ideal_R113));
+coeffs_R113 = coordinates(R113*R131^11, ideal_R113);
+print((monomials_R113*transpose(coeffs_R113))[1] == R113*R131^11);
 
-# 19. R142/R131 of bidegree (-10,2)
-monomials_R142 = get_bidegree_monomials(-10,2);
-ideal_R142 = ideal(R, monomials_R142);
-print(ideal_membership(R142*R131^1, ideal_R142));
-coeffs_R142 = coordinates(R142*R131^1, ideal_R142);
-print((monomials_R142*transpose(coeffs_R142))[1] == R142*R131^1);
-
-# 20. R214/R131 of bidegree (-22,14)
-monomials_R214 = get_bidegree_monomials(-22,14);
+# 15. R214/R131 of bidegree (-11,13)
+monomials_R214 = get_bidegree_monomials(-11,13);
 ideal_R214 = ideal(R, monomials_R214);
-print(ideal_membership(R214*R131^13, ideal_R214));
-coeffs_R214 = coordinates(R214*R131^13, ideal_R214);
-print((monomials_R214*transpose(coeffs_R214))[1] == R214*R131^13);
+print(ideal_membership(R214*R131^12, ideal_R214));
+coeffs_R214 = coordinates(R214*R131^12, ideal_R214);
+print((monomials_R214*transpose(coeffs_R214))[1] == R214*R131^12);
 
-# 21. R119/R131 of bidegree (-23,19)
-monomials_R119 = get_bidegree_monomials(-23,19);
+# 16. R119/R131 of bidegree (-12,18)
+monomials_R119 = get_bidegree_monomials(-12,18);
 ideal_R119 = ideal(R, monomials_R119);
-print(ideal_membership(R119*R131^18, ideal_R119));
-coeffs_R119 = coordinates(R119*R131^18, ideal_R119);
-print((monomials_R119*transpose(coeffs_R119))[1] == R119*R131^18);
+print(ideal_membership(R119*R131^17, ideal_R119));
+coeffs_R119 = coordinates(R119*R131^17, ideal_R119);
+print((monomials_R119*transpose(coeffs_R119))[1] == R119*R131^17);
 
-# 22. R024/R131 of bidegree (-24,24)
-monomials_R024 = get_bidegree_monomials(-24,24);
+# 17. R024/R131 of bidegree (-13,23)
+monomials_R024 = get_bidegree_monomials(-13,23);
 ideal_R024 = ideal(R, monomials_R024);
-print(ideal_membership(R024*R131^23, ideal_R024));
-coeffs_R024 = coordinates(R024*R131^23, ideal_R024);
-print((monomials_R024*transpose(coeffs_R024))[1] == R024*R131^23);
+print(ideal_membership(R024*R131^22, ideal_R024));
+coeffs_R024 = coordinates(R024*R131^22, ideal_R024);
+print((monomials_R024*transpose(coeffs_R024))[1] == R024*R131^22);
