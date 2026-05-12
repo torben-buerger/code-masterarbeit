@@ -248,7 +248,7 @@ delta_21_ideal = ideal(R, delta_21);
 delta_22_ideal = ideal(R, delta_22);
 delta_11_delta_21_ideal = ideal(R, delta_11*delta_21);
 delta_11_delta_22_ideal = ideal(R, delta_11*delta_22);
-delta_12_delta_21_ideal = ideal(R, dleta_12*delta_21);
+delta_12_delta_21_ideal = ideal(R, delta_12*delta_21);
 
 # Investigate the first polynomial delta_11 and compute the variety along which the blow-up shall be performed
 W_delta_11 = preimage(pi_1, delta_11_ideal);
