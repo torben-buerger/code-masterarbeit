@@ -45,8 +45,16 @@ invar_15 = x[1]^8*x[2]*x[3]^3 - 14//23*x[1]^4*x[2]^5*x[3]^3 - 1//23*x[2]^9*x[3]^
 invar_16 = x[1]^8*x[2]^3*x[3] + 2*x[1]^4*x[2]^7*x[3] - 1//11*x[2]^11*x[3] + 1//11*x[1]^11*x[4] - 2*x[1]^7*x[2]^4*x[4] - x[1]^3*x[2]^8*x[4];
 invars_ideal = ideal(R, [invar_1, invar_2, invar_3, invar_4, invar_5, invar_6, invar_7, invar_8, invar_9, invar_10, invar_11, invar_12, invar_13, invar_14, invar_15, invar_16]);
 
+invars_basis = standard_basis(invars_ideal, ordering=negdegrevlex(R));
+invars_basis_ideal = ideal(R, invars_basis);
+S_basis, z = polynomial_ring(L, :z => (1:43));
+pi_basis = hom(S_basis, R, [gens(invars_basis_ideal)[i] for i in 1:43]);
+relations_basis_invars = kernel(pi_basis);
+basis_relations_basis = standard_basis(relations_basis_invars, ordering=negdegrevlex(S_basis));
+print(length(basis_relations_basis));
+
 # Compute the relations between the invariants to obtain the presentation of the invariant ring
-S, y = polynomial_ring(K, :y => (1:16));
+S, y = polynomial_ring(L, :y => (1:16));
 pi = hom(S, R, [gens(invars_ideal)[i] for i in 1:16]);
 relations_ideal = kernel(pi);
 relations_basis = standard_basis(relations_ideal, ordering=negdegrevlex(S));
