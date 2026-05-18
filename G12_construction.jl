@@ -25,7 +25,7 @@ invars = fundamental_invariants(IR);
 invars_ideal_1 = ideal(poly_invar, invars);
 
 # Define the invariants as polynomials in the original variables
-R, x = polynomial_ring(K, :x => (1:4));
+R, x = polynomial_ring(L, :x => (1:4));
 
 invar_1 = x[1]*x[3] + x[2]*x[4];
 invar_2 = x[1]^5*x[2] - x[1]*x[2]^5;
