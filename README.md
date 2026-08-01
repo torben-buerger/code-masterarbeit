@@ -1,0 +1,58 @@
+# Code for the Master's Thesis "Partial Resolutions of Symplectic Linear Quotient Singularities via Blowups"
+
+This repository contains the [Julia](https://julialang.org/)/[OSCAR](https://www.oscar-system.org/), [MAGMA](https://magma.maths.usyd.edu.au/magma/), and [Singular](https://www.singular.uni-kl.de/) code used to produce and verify the computations in my master's thesis "Partial Resolutions of Symplectic Linear Quotient Singularities via Blowups", to be submitted at RPTU Kaiserslautern-Landau in September 2026 under the supervision of [Prof. Dr. Ulrich Thiel](https://agag-thiel.math.rptu.de/math/about.html).
+
+## About
+
+In the thesis the symplectic linear quotient singularities of type `C^2n/G` for a symplectic group `G` are studied. The focus lies on symplectic groups arising from complex reflection groups by the action on the direct sum of `C^n` and its dual with corresponding dual action. The explicit computations involve the groups (in the [Shephard–Todd](https://doi.org/10.4153/CJM-1954-028-3) classification) `G_4`, `G_5`, and `G_6`. To be precise the code contains:
+
+- the construction of the groups a complex reflection groups in a suitable number field, the symplectic reflection groups associated to them, and the computation of the correspoding invariant rings using OSCAR's invariant ring functionality;
+- the computations of defining relations for the coordinate rings of the varieties `C^2n/G`, partially computed using MAGMA and Singular;
+- the computations of the blowups of some of these quotient varities in Weil divisors derived from fixed spaces of certain reflecitons;
+- the analysis of some charts resulting from the blowups.
+
+## Contents
+
+The repository shall be considered as a collection of self-contained files that can be run in a fresh session of the respective programming language. Below, a short overview of the computations included in the files is given.
+
+### Group `G_4`
+| File | Description |
+| --- | --- |
+| `matrixgroups.jl` | Constructs the group `G_4` as a complex reflection group in the number field `Q(i,zeta3)` for a cube root of unity `zeta3`, its dual, the reflecting hyperplanes for both of them, the symplectifiactions for both, and computes the invariants for both in order to compare them with the ones given by [Lehn–Sorger](https://hal.science/hal-00331839). Finally, the matrix representitaves the normal subgroup `Q_8` of `G_4` are determined and it is verified that reflecting hyperplanes coincide in the quotient variety induced by `Q_8`. |
+| `invariants.jl` | Includes the computation of the relations of `C^4/G_4` and of the generators therein for the Weil divisors `W_1` and `W_2` corresponding to the unions of the reflecting hyperplanes of `G_4` and its dual. |
+| `blowupsW1.jl` | Blowup computation for the quotient variety `C^4/G_4` along `W_1` and analysis of the resulting charts. |
+| `blowupsW2.jl` | Blowup computation for the quotient variety `C^4/G_4` along `W_2`, analysis of the resulting charts, and comparison to the results obtained in `blowupsW1.jl`. |
+| `blowups.jl` | Old version of `blowupsW2.jl`.|
+
+### Group `G_5`
+
+| File | Description |
+| --- | --- |
+| `G_5_construction.jl` | Includes the construction of the group `G_5`, its invariant ring, and computations of the relations defining `C^4/G_5`, in particular an intent to reconstruct the relations given by [Berry](https://doi.org/10.48550/arXiv.2505.24524). |
+| `G_5_magma.m` | Independent computation of the relations admitted by the invariant ring associated to `G_5` using MAGMA. |
+| `G_5_relations.sng` | Singular script used to compute a minimal generating set of the relations ideal for `G_5`. |
+| `G_5_reflections_2.jl` | Computation of the reflection hyperplanes of `G_5` and the blowups along the  divisors associated to the unions of them in various combinations. Additionally includes a computation of the blowup ideal used by [Berry](https://doi.org/10.48550/arXiv.2505.24524). |
+| `G_5_reflections_blowups.jl` | Old version of `G_5_reflections_2.jl` including an intent to compute the relations for `C^4/G_5`. |
+| `blowupsG5.jl` | Blowup computations for `C^4/G_5` along some of the divisors computed in `G_5_reflections_2.jl`. |
+| `G_5_Berry_chart_131.jl`, `G_5_Berry_chart_240.jl` | Analysis of specific blowup charts arising in the partial resolution of `G_5` derived from the paper of [Berry](https://doi.org/10.48550/arXiv.2505.24524). |
+
+### Group `G_6`
+
+| File | Description |
+| --- | --- |
+| `G_6_construction.jl` |  Includes the construction of the group `G_6`, its invariant ring, and computations of the relations defining `C^4/G_6`. Contains the computations of the reflecting hyperplanes of `G_6` and generators for the divisors obtained by combing various of them in distinct multiplicities. |
+| `G_6_magma.m` | Independent computation of the relations admitted by the invariant ring associated to `G_6` using MAGMA. |
+| `blowupsG6.jl` | Blowup computations for `C^4/G_6` along some of the divisors computed in `G_6_construction.jl`. |
+| `blowupsG6_W11.jl`, `blowupsG6_W1121.jl`, `blowupsG6_W21.jl` | Blowup computations for `C^4/G_6` along specific divisors and combinations of divisors respectively. Partially includes an anlysis of the resulting charts. |
+
+## Requirements
+
+- [Julia](https://julialang.org/) (version used: `1.12.6`) with the [OSCAR](https://www.oscar-system.org/) computer algebra system (version used: `1.7.1`), click [here](https://www.oscar-system.org/install/) for an installation guide.
+- [MAGMA](https://magma.maths.usyd.edu.au/magma/) (versions used: `2.28-8` and `2.29-1`), note that MAGMA is used only for independent cross-checks in the `*_magma.m` files.
+- [Singular](https://www.singular.uni-kl.de/) (version used: `4.3.2`), note that Singular is used only for the independent cross-check in `G_5_relations.sng`.
+
+Only the Julia/OSCAR scripts are required to reproduce the main results whilst the MAGMA and Singular computations are only used to produce intermediate results not running through in OSCAR.
+
+## Contact
+
+Torben Bürger (`tbuerger(at)rptu.de`), feel free to reach out for questions about the code.
