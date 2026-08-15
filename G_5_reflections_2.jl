@@ -30,14 +30,14 @@ G_5_symp = matrix_group([a_symp, b_symp, c_symp, c_conj_symp]);
 classes = conjugacy_classes(G_5);
 eigenvals = [eigenvalues(matrix(representative(c))) for c in classes];
 
-ref_1 = representative(classes[11]);
-ref_1_list = collect(classes[11]);
-ref_2 = representative(classes[12]);
-ref_2_list = collect(classes[12]);
-ref_3 = representative(classes[16]);
-ref_3_list = collect(classes[16]);
-ref_4 = representative(classes[17]);
-ref_4_list = collect(classes[17]);
+ref_1 = representative(classes[12]);
+ref_1_list = collect(classes[12]);
+ref_2 = representative(classes[11]);
+ref_2_list = collect(classes[11]);
+ref_3 = representative(classes[17]);
+ref_3_list = collect(classes[17]);
+ref_4 = representative(classes[16]);
+ref_4_list = collect(classes[16]);
 
 # Find the reflecting hyperplanes (= lines as we are in dimension 2) of the reflections by computing the eigenvectors.  We have to take the transposed matrices because Oscar computes the action from the right
 ref_1_eigvecs = [eigenspaces(K, transpose(matrix(m))) for m in ref_1_list];
@@ -128,8 +128,8 @@ ref_poly_11 = v_11[2]*x[1] - v_11[1]*x[2];
 ref_poly_12 = v_12[2]*x[1] - v_12[1]*x[2];
 ref_poly_13 = v_13[2]*x[1] - v_13[1]*x[2];
 ref_poly_14 = v_14[2]*x[1] - v_14[1]*x[2];
-delta_21 = ref_poly_11*ref_poly_12*ref_poly_13*ref_poly_14;  # Using the notation of the Bonnafé construction, this is the polynomial for the first orbit
-delta_22 = ref_poly_11^2*ref_poly_12^2*ref_poly_13^2*ref_poly_14^2;  # This is the final polynomial for omega_1 since e_omega_1 = 3
+delta_11 = ref_poly_11*ref_poly_12*ref_poly_13*ref_poly_14;  # Using the notation of the Bonnafé construction, this is the polynomial for the first orbit
+delta_12 = ref_poly_11^2*ref_poly_12^2*ref_poly_13^2*ref_poly_14^2;  # This is the final polynomial for omega_1 since e_omega_1 = 3
 
 # Next, consider the orbit omega_2 corresponding to ref_2 and ref_3
 v_21 = V(collect(ref_2_unique_lines[1][:, 1]));
@@ -146,8 +146,8 @@ ref_poly_21 = v_21[2]*x[1] - v_21[1]*x[2];
 ref_poly_22 = v_22[2]*x[1] - v_22[1]*x[2];
 ref_poly_23 = v_23[2]*x[1] - v_23[1]*x[2];
 ref_poly_24 = v_24[2]*x[1] - v_24[1]*x[2];
-delta_11 = ref_poly_21*ref_poly_22*ref_poly_23*ref_poly_24;  # Using the notation of the Bonnafé construction, this is the polynomial for the second orbit
-delta_12 = ref_poly_21^2*ref_poly_22^2*ref_poly_23^2*ref_poly_24^2;  # This is the final polynomial for omega_2 since e_omega_2 = 3
+delta_21 = ref_poly_21*ref_poly_22*ref_poly_23*ref_poly_24;  # Using the notation of the Bonnafé construction, this is the polynomial for the second orbit
+delta_22 = ref_poly_21^2*ref_poly_22^2*ref_poly_23^2*ref_poly_24^2;  # This is the final polynomial for omega_2 since e_omega_2 = 3
 
 # Define the coordinate ring of the variety (V+V^*)/G_5_symp by taking the relations of the invariant ring of G_5_symp computed by Berry, see G_5_construction.jl
 # First, we define the invariants of the symplectic action of G_5, see G_5_construction.jl for details
