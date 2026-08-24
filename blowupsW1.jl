@@ -241,6 +241,8 @@ generator_3_4 = gens(b_minimal_ideal_3)[20];
 generator_3_5 = gens(b_minimal_ideal_3)[23];
 c_3_simplified_ideal = ideal(C, [generator_3_1, generator_3_2, generator_3_3, generator_3_4, generator_3_5]);
 print(b_minimal_ideal_3 == c_3_simplified_ideal);  # Shows that the ideal can be simplified to only five generators
+X_3 = spec(C, c_3_simplified_ideal);
+sing_3 = singular_locus(X_3);
 
 # We want to show that this chart is isomorphic to the four dimensional S_3-quotient using a description established by Weyl (using polarizations of elementary symmetric polynomials)
 R_S3, x, y = polynomial_ring(M, :x => 1:3, :y => 1:3);
@@ -311,6 +313,191 @@ eval_sing_6 = evaluate_variables(gens(sing_6_ideal), [10, 11]);
 nonzero_eval_sing_6 = nonzero_constant_indices(eval_sing_6);  # Shows that there is a non-zero constant generator when both b[2] and b[3] are set to zero
 print(nonzero_eval_sing_6);
 
+
+# The charts admitting singularities are blown up in their respective reduced singular locus to obtain the resolution as described in the paper
+
+sing_2_ideal = modulus(OO(sing_2[1]));
+sing_3_ideal = modulus(OO(sing_3[1]));
+sing_6_ideal = modulus(OO(sing_6[1]));
+
+min_sing_2 = standard_basis(sing_2_ideal, ordering=negdegrevlex(C));
+min_sing_3 = standard_basis(sing_3_ideal, ordering=negdegrevlex(C));
+min_sing_6 = gens(radical(sing_6_ideal));
+
+Ct, z, b, t = polynomial_ring(M, :z => (1:8), :b => (1:6), :t => (1:1));
+embed_Ct = hom(C, Ct, [z[1], z[2], z[3], z[4], z[5], z[6], z[7], z[8], b[1], b[2], b[3], b[4], b[5], b[6]]);
+
+blowup_vec_2 = union([z[1], z[2], z[3], z[4], z[5], z[6], z[7], z[8], b[1], b[2], b[3], b[4], b[5], b[6]], [embed_Ct(f)*t[1] for f in min_sing_2]);
+blowup_vec_3 = union([z[1], z[2], z[3], z[4], z[5], z[6], z[7], z[8], b[1], b[2], b[3], b[4], b[5], b[6]], [embed_Ct(f)*t[1] for f in min_sing_3]);
+blowup_vec_6 = union([z[1], z[2], z[3], z[4], z[5], z[6], z[7], z[8], b[1], b[2], b[3], b[4], b[5], b[6]], [embed_Ct(f)*t[1] for f in min_sing_6]);
+
+# We compute the blowups locally above the covering charts having a singularity by using the Rees algebra as before
+D2, z, b, w = polynomial_ring(M, :z => (1:8), :b => (1:6), :w => (1:3));
+blowup_map_2 = hom(D2, Ct, blowup_vec_2);
+relations_chart_2 = ideal(Ct, [embed_Ct(f) for f in gens(c_2_simplified_ideal)]);
+kernel_blowup_map_2 = preimage(blowup_map_2, relations_chart_2);
+basis_blowup_2 = standard_basis(kernel_blowup_map_2, ordering=negdegrevlex(D2));  # Get a smaller generating set of the blowup ideal
+basis_blowup_ideal_2 = ideal(D2, collect(basis_blowup_2));
+print(basis_blowup_ideal_2 == kernel_blowup_map_2);
+
+# Chart 1: w[1] = 1
+kernel_basis_21 = ideal(D2, union(basis_blowup_2, [w[1] - 1]));
+b_minimal_vars_21, b_minimal_ideal_21, b_elim_rules_21 = minimal_embedding(kernel_basis_21);
+X_21 = spec(D2, b_minimal_ideal_21);
+print(is_smooth(X_21));  # returns true
+
+# Chart 2: w[2] = 1
+kernel_basis_22 = ideal(D2, union(basis_blowup_2, [w[2] - 1]));
+b_minimal_vars_22, b_minimal_ideal_22, b_elim_rules_22 = minimal_embedding(kernel_basis_22);  # becomes the 0 ideal
+
+# Chart 3: w[3] = 1
+kernel_basis_23 = ideal(D2, union(basis_blowup_2, [w[3] - 1]));
+b_minimal_vars_23, b_minimal_ideal_23, b_elim_rules_23 = minimal_embedding(kernel_basis_23);  # becomes the 0 ideal
+
+
+D3, z, b, u = polynomial_ring(M, :z => (1:8), :b => (1:6), :u => (1:17));
+blowup_map_3 = hom(D3, Ct, blowup_vec_3);
+relations_chart_3 = ideal(Ct, [embed_Ct(f) for f in gens(c_3_simplified_ideal)]);
+kernel_blowup_map_3 = preimage(blowup_map_3, relations_chart_3);
+basis_blowup_3 = standard_basis(kernel_blowup_map_3, ordering=negdegrevlex(D3));  # Get a smaller generating set of the blowup ideal
+basis_blowup_ideal_3 = ideal(D3, collect(basis_blowup_3));
+print(basis_blowup_ideal_3 == kernel_blowup_map_3);
+
+# Chart 1: u[1] = 1
+kernel_basis_31 = ideal(D3, union(basis_blowup_3, [u[1] - 1]));
+b_minimal_vars_31, b_minimal_ideal_31, b_elim_rules_31 = minimal_embedding(kernel_basis_31);  # becomes the 0 ideal
+
+# Chart 2: u[2] = 1
+kernel_basis_32 = ideal(D3, union(basis_blowup_3, [u[2] - 1]));
+b_minimal_vars_32, b_minimal_ideal_32, b_elim_rules_32 = minimal_embedding(kernel_basis_32);
+X_32 = spec(D3, b_minimal_ideal_32);
+print(is_smooth(X_32));  # returns true
+
+# Chart 3: u[3] = 1
+kernel_basis_33 = ideal(D3, union(basis_blowup_3, [u[3] - 1]));
+b_minimal_vars_33, b_minimal_ideal_33, b_elim_rules_33 = minimal_embedding(kernel_basis_33);
+X_33 = spec(D3, b_minimal_ideal_33);
+print(is_smooth(X_33));  # returns true
+
+# Chart 4: u[4] = 1
+kernel_basis_34 = ideal(D3, union(basis_blowup_3, [u[4] - 1]));
+b_minimal_vars_34, b_minimal_ideal_34, b_elim_rules_34 = minimal_embedding(kernel_basis_34);
+eval_b_min_34 = evaluate_variables(gens(b_minimal_ideal_34), [15]);
+nonzero_eval_b_min_34 = nonzero_constant_indices(eval_b_min_34);  # Shows that there is a non-zero constant generator when u[1] is set to zero, proving that the first chart covers it
+print(nonzero_eval_b_min_34);
+
+# Chart 5: u[5] = 1
+kernel_basis_35 = ideal(D3, union(basis_blowup_3, [u[5] - 1]));
+b_minimal_vars_35, b_minimal_ideal_35, b_elim_rules_35 = minimal_embedding(kernel_basis_35);
+X_35 = spec(D3, b_minimal_ideal_35);
+print(is_smooth(X_35));  # returns true
+
+# Chart 6: u[6] = 1
+kernel_basis_36 = ideal(D3, union(basis_blowup_3, [u[6] - 1]));
+b_minimal_vars_36, b_minimal_ideal_36, b_elim_rules_36 = minimal_embedding(kernel_basis_36);  # becomes the zero ideal
+
+# Chart 7: u[7] = 1
+kernel_basis_37 = ideal(D3, union(basis_blowup_3, [u[7] - 1]));
+b_minimal_vars_37, b_minimal_ideal_37, b_elim_rules_37 = minimal_embedding(kernel_basis_37);
+X_37 = spec(D3, b_minimal_ideal_37);
+print(is_smooth(X_37));  # returns true
+
+# Chart 8: u[8] = 1
+kernel_basis_38 = ideal(D3, union(basis_blowup_3, [u[8] - 1]));
+b_minimal_vars_38, b_minimal_ideal_38, b_elim_rules_38 = minimal_embedding(kernel_basis_38);
+X_38 = spec(D3, b_minimal_ideal_38);
+print(is_smooth(X_38));  # returns true
+
+# Chart 9: u[9] = 1
+kernel_basis_39 = ideal(D3, union(basis_blowup_3, [u[9] - 1]));
+b_minimal_vars_39, b_minimal_ideal_39, b_elim_rules_39 = minimal_embedding(kernel_basis_39);
+eval_b_min_39 = evaluate_variables(gens(b_minimal_ideal_39), [15]);
+nonzero_eval_b_min_39 = nonzero_constant_indices(eval_b_min_39);  # Shows that there is a non-zero constant generator when u[1] is set to zero, proving that the first chart covers it
+print(nonzero_eval_b_min_39);
+
+# Chart 10: u[10] = 1
+kernel_basis_310 = ideal(D3, union(basis_blowup_3, [u[10] - 1]));
+b_minimal_vars_310, b_minimal_ideal_310, b_elim_rules_310 = minimal_embedding(kernel_basis_310);
+eval_b_min_310 = evaluate_variables(gens(b_minimal_ideal_310), [19, 20, 22]);
+nonzero_eval_b_min_310 = nonzero_constant_indices(eval_b_min_310);  # Shows that there is a non-zero constant generator when u[5], u[6] and u[8] are set to zero, proving that the union of these charts covers it
+print(nonzero_eval_b_min_310);
+
+# Chart 11: u[11] = 1
+kernel_basis_311 = ideal(D3, union(basis_blowup_3, [u[11] - 1]));
+b_minimal_vars_311, b_minimal_ideal_311, b_elim_rules_311 = minimal_embedding(kernel_basis_311);
+eval_b_min_311 = evaluate_variables(gens(b_minimal_ideal_311), [15]);
+nonzero_eval_b_min_311 = nonzero_constant_indices(eval_b_min_311);  # Shows that there is a non-zero constant generator when u[1] is set to zero, proving that the first chart covers it
+print(nonzero_eval_b_min_311);
+
+# Chart 12: u[12] = 1
+kernel_basis_312 = ideal(D3, union(basis_blowup_3, [u[12] - 1]));
+b_minimal_vars_312, b_minimal_ideal_312, b_elim_rules_312 = minimal_embedding(kernel_basis_312);
+X_312 = spec(D3, b_minimal_ideal_312);
+print(is_smooth(X_312));  # returns true
+
+# Chart 13: u[13] = 1
+kernel_basis_313 = ideal(D3, union(basis_blowup_3, [u[13] - 1]));
+b_minimal_vars_313, b_minimal_ideal_313, b_elim_rules_313 = minimal_embedding(kernel_basis_313);
+eval_b_min_313 = evaluate_variables(gens(b_minimal_ideal_313), [15, 22]);
+nonzero_eval_b_min_313 = nonzero_constant_indices(eval_b_min_313);  # Shows that there is a non-zero constant generator when u[1] and u[8] are set to zero, proving that the union of these charts covers it
+print(nonzero_eval_b_min_313);
+
+# Chart 14: u[14] = 1
+kernel_basis_314 = ideal(D3, union(basis_blowup_3, [u[14] - 1]));
+b_minimal_vars_314, b_minimal_ideal_314, b_elim_rules_314 = minimal_embedding(kernel_basis_314);
+eval_b_min_314 = evaluate_variables(gens(b_minimal_ideal_314), [22, 24, 27]);
+nonzero_eval_b_min_314 = nonzero_constant_indices(eval_b_min_314);  # Shows that there is a non-zero constant generator when u[8], u[10] and u[13] are set to zero, proving that the union of these charts covers it
+print(nonzero_eval_b_min_314);
+
+# Chart 15: u[15] = 1
+kernel_basis_315 = ideal(D3, union(basis_blowup_3, [u[15] - 1]));
+b_minimal_vars_315, b_minimal_ideal_315, b_elim_rules_315 = minimal_embedding(kernel_basis_315);
+eval_b_min_315 = evaluate_variables(gens(b_minimal_ideal_315), [19, 20, 22]);
+nonzero_eval_b_min_315 = nonzero_constant_indices(eval_b_min_315);  # Shows that there is a non-zero constant generator when u[5], u[6] and u[8] are set to zero, proving that the union of these charts covers it
+print(nonzero_eval_b_min_315);
+
+# Chart 16: u[16] = 1
+kernel_basis_316 = ideal(D3, union(basis_blowup_3, [u[16] - 1]));
+b_minimal_vars_316, b_minimal_ideal_316, b_elim_rules_316 = minimal_embedding(kernel_basis_316);
+eval_b_min_316 = evaluate_variables(gens(b_minimal_ideal_316), [31]);
+nonzero_eval_b_min_316 = nonzero_constant_indices(eval_b_min_316);  # Shows that there is a non-zero constant generator when u[17]is to zero, proving that this chart covers it
+print(nonzero_eval_b_min_316);
+
+# Chart 17: u[17] = 1
+kernel_basis_317 = ideal(D3, union(basis_blowup_3, [u[17] - 1]));
+b_minimal_vars_317, b_minimal_ideal_317, b_elim_rules_317 = minimal_embedding(kernel_basis_317);
+X_317 = spec(D3, b_minimal_ideal_317);
+print(is_smooth(X_317));  # returns true
+
+
+D6, z, b, y = polynomial_ring(M, :z => (1:8), :b => (1:6), :y => (1:4));
+blowup_map_6 = hom(D6, Ct, blowup_vec_6);
+relations_chart_6 = ideal(Ct, [embed_Ct(f) for f in gens(c_6_simplified_ideal)]);
+kernel_blowup_map_6 = preimage(blowup_map_6, relations_chart_6);
+
+# Chart 1: y[1] = 1
+kernel_basis_61 = ideal(D6, union(gens(kernel_blowup_map_6), [y[1] - 1]));
+b_minimal_vars_61, b_minimal_ideal_61, b_elim_rules_61 = minimal_embedding(kernel_basis_61);
+X_61 = spec(D6, b_minimal_ideal_61);
+print(is_smooth(X_61));  # returns true?
+
+# Chart 2: y[2] = 1
+kernel_basis_62 = ideal(D6, union(gens(kernel_blowup_map_6), [y[2] - 1]));
+b_minimal_vars_62, b_minimal_ideal_62, b_elim_rules_62 = minimal_embedding(kernel_basis_62);
+X_62 = spec(D6, b_minimal_ideal_62);
+print(is_smooth(X_62));  # returns true?
+
+# Chart 3: y[3] = 1
+kernel_basis_63 = ideal(D6, union(gens(kernel_blowup_map_6), [y[3] - 1]));
+b_minimal_vars_63, b_minimal_ideal_63, b_elim_rules_63 = minimal_embedding(kernel_basis_63);
+X_63 = spec(D6, b_minimal_ideal_63);
+print(is_smooth(X_63));  # returns true?
+
+# Chart 4: y[4] = 1
+kernel_basis_64 = ideal(D6, union(gens(kernel_blowup_map_6), [y[4] - 1]));
+b_minimal_vars_64, b_minimal_ideal_64, b_elim_rules_64 = minimal_embedding(kernel_basis_64);
+X_64 = spec(D6, b_minimal_ideal_64);
+print(is_smooth(X_64));  # returns true?
 
 # Finally, we compute the fiber of the blowup map over the origin
 fiber_origin_basis_ideal = ideal(C, union(gens(basis_blowup_ideal), [z[1], z[2], z[3], z[4], z[5], z[6], z[7], z[8]]));

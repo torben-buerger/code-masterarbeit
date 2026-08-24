@@ -359,8 +359,9 @@ generator_3_4 = gens(b_minimal_ideal_3)[21];
 generator_3_5 = gens(b_minimal_ideal_3)[22];
 c_3_simplified_ideal = ideal(C, [generator_3_1, generator_3_2, generator_3_3, generator_3_4, generator_3_5]);
 print(b_minimal_ideal_3 == c_3_simplified_ideal);  # Shows that the ideal can be simplified to only five generators
-#X_3 = spec(C, c_3_simplified_ideal);
-#sing_3 = singular_locus(X_3);
+X_3 = spec(C, c_3_simplified_ideal);
+sing_3 = singular_locus(X_3);
+
 # We want to show that this chart is isomorphic to the four dimensional S_3-quotient using a description established by Weyl (using polarizations of elementary symmetric polynomials)
 R_S3, x, y = polynomial_ring(M, :x => 1:3, :y => 1:3);
 p_1 = x[1]*x[2] + x[1]*x[3] + x[2]*x[3];
