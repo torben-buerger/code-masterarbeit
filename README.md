@@ -22,6 +22,7 @@ The repository shall be considered as a collection of self-contained files that 
 | `invariants.jl` | Includes the computation of the relations of `C^4/G_4` and of the generators therein for the Weil divisors `W_1` and `W_2` corresponding to the unions of the reflecting hyperplanes of `G_4` and its dual. |
 | `blowupsW1.jl` | Blowup computation for the quotient variety `C^4/G_4` along `W_1` and analysis of the resulting charts. |
 | `blowupsW2.jl` | Blowup computation for the quotient variety `C^4/G_4` along `W_2`, analysis of the resulting charts, and comparison to the results obtained in `blowupsW1.jl`. |
+| `blowupW1W2fiber.jl` | Computations of the blowups considered in `blowupsW1.jl` and `blowupsW2.jl` and computation of the dimension of the central fiber to show that the resolutions are nonisomorphic. |
 | `blowups.jl` | Old version of `blowupsW2.jl`.|
 
 ### Group `G_5`
