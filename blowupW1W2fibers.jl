@@ -374,4 +374,20 @@ X_prod_fiber_3 = spec(P, prod_fiber_3);
 comp_fiber_3 = irreducible_components(X_prod_fiber_3);
 print([dim(c) for c in comp_fiber_3]);  # all of dimension 4
 
-# Comparing the dimension of the fiber of the graph to the fiber of the resolution in the charts allows us to conclude that the resolutions are nonisomorphic
+origin_ideal = ideal(P, [z[1], z[2], z[3], z[4], z[5], z[6], z[7], z[8]]);
+
+# The closure of the graph is computed via saturation, 
+# Note that none of the following computations ran through in a reasonable running time whence the results are unclear
+graph_closure_1 = saturation(prod_1, origin_ideal);
+graph_closure_2 = saturation(prod_2, origin_ideal);
+graph_closure_3 = saturation(prod_3, origin_ideal);
+
+# Compute the central fiber of the graph closure
+graph_fiber_1 = graph_closure_1 + origin_ideal;
+graph_fiber_2 = graph_closure_2 + origin_ideal;
+graph_fiber_3 = graph_closure_3 + origin_ideal;
+
+# Check the dimensions of the true graph fibers
+print("Dimension of Graph Fiber 1: ", dim(graph_fiber_1), "\n");
+print("Dimension of Graph Fiber 2: ", dim(graph_fiber_2), "\n");
+print("Dimension of Graph Fiber 3: ", dim(graph_fiber_3), "\n");
