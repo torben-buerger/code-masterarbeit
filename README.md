@@ -34,8 +34,9 @@ The repository shall be considered as a collection of self-contained files that 
 | `G_5_relations.sng` | Singular script used to compute a minimal generating set of the relations ideal for `G_5`. |
 | `G_5_reflections_2.jl` | Computation of the reflection hyperplanes of `G_5` and the blowups along the  divisors associated to the unions of them in various combinations. Additionally includes a computation of the blowup ideal used by [Berry](https://doi.org/10.48550/arXiv.2505.24524). |
 | `G_5_reflections_blowups.jl` | Old version of `G_5_reflections_2.jl` including an intent to compute the relations for `C^4/G_5`. |
-| `blowupsG5.jl` | Blowup computations for `C^4/G_5` along some of the divisors computed in `G_5_reflections_2.jl`. |
+| `blowupsG5.jl` | Blowup computations for `C^4/G_5` along some of the divisors computed in `G_5_reflections_2.jl` that did not run through. |
 | `G_5_Berry_chart_131.jl`, `G_5_Berry_chart_240.jl` | Analysis of specific blowup charts arising in the partial resolution of `G_5` derived from the paper of [Berry](https://doi.org/10.48550/arXiv.2505.24524). |
+| `G_5_blowup.m` | Blowup computations for `C^4/G_5` along one of the ideals computed in `G_5_reflections_2.jl` using MAGMA and analysis of the resulting charts and their singular loci. |
 
 ### Group `G_6`
 
