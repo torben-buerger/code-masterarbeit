@@ -637,10 +637,12 @@ print(is_smooth(X_64));  # returns true?
 fiber_origin_basis_ideal = ideal(C, union(gens(basis_blowup_ideal), [z[1], z[2], z[3], z[4], z[5], z[6], z[7], z[8]]));
 reduced_fiber_origin_basis_ideal = radical(fiber_origin_basis_ideal);
 
-# The reduced fiber is used to compute the dimension of the fiver, which is used to show that the resolution is semi-small
+# The reduced fiber is used to compute the dimension of the fiber, which is used to show that the resolution is semi-small
 X_fiber = spec(C, reduced_fiber_origin_basis_ideal);
 components_fiber = irreducible_components(X_fiber);
 
+# Computations of the fiber of the origin that were initially done to distinguish the two symplectic resolutions but they are no longer relevant
+#=
 # In order to compare the fibers of W_1 and W_2, we use the non-reduced fiber
 X_nonred_fiber = spec(C, fiber_origin_basis_ideal);
 
@@ -676,3 +678,4 @@ C_quo, pi_C = quo(C, embedded_relations);
 quo_fiber_W_1 = ideal(C_quo, [pi_C(g) for g in min_basis_fiber_W_1]);
 quo_fiber_W_2 = ideal(C_quo, [pi_C(g) for g in min_basis_fiber_W_2]);
 print(quo_fiber_W_1 == quo_fiber_W_2);
+=#

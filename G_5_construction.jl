@@ -120,7 +120,7 @@ S, (y_h, y_A1, y_A0, y_Aneg1, y_B1, y_B0, y_Bneg1, y_C2, y_C1, y_C0, y_Cneg1, y_
 # Define homomorphism from S to R mapping y_i to the invariants given by Berry
 pi_1 = hom(S, R, [h, A1, A0, Aneg1, B1, B0, Bneg1, C2, C1, C0, Cneg1, Cneg2]);
 #=# Compute kernel of f to obtain the relations
-relations_ideal = kernel(f);
+relations_ideal = kernel(f);  # Does not run trough even after multiple days on a server
 basis_relations = standard_basis(relations_ideal, ordering=negdegrevlex(S));
 
 g = hom(S, R, [invar_1, invar_2, invar_3, invar_4, invar_5, invar_6, invar_7, invar_8, invar_9, invar_10, invar_11, invar_12]);

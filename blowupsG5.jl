@@ -88,3 +88,5 @@ basis_blowup_ideal_21 = ideal(C, collect(basis_blowup_21));
 # Elimination theory approach to get the ideal of the blowup variety in the relative projective space P^4_C
 blowup_ideal_21 = ideal(Aux_large, union([embed_B(rel) for rel in gens(relations_ideal)], [b[i] - embed_B(blowup_vector_21[12+i])*t[1] for i in 1:5]));
 Rees_rel_21 = eliminate(blowup_ideal_21, [t[1]]);  # Get a presentation of the Rees algebra which corresponds to the blowup in delta_21
+
+# All of the above computations to find a relation ideal for the blowup are computationally too expensive to run through (tested on a server for a week)

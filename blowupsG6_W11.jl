@@ -220,6 +220,7 @@ large_eval_4 = evaluate_variables(gens(large_minimal_ideal_4), [11, 12, 13]);
 nonzero_large_eval_gen_4 = nonzero_constant_indices(large_eval_4);  
 print(nonzero_large_eval_gen_4);
 
+# From the above evaluations, we can conclude that no union of charts covers one of the remaining ones
 
 # We compute the radicals of the ideals inducing the affine charts
 rad_chart_1 = radical(b_minimal_ideal_1);

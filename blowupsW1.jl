@@ -499,11 +499,14 @@ b_minimal_vars_64, b_minimal_ideal_64, b_elim_rules_64 = minimal_embedding(kerne
 X_64 = spec(D6, b_minimal_ideal_64);
 print(is_smooth(X_64));  # returns true?
 
+# Computations of the fiber of the origin that were initially done to distinguish the two symplectic resolutions but they are no longer relevant
+# Only the dimension of the fiber is relevant, but this is covered by the symmetric case in blowupsW2.jl
+#=
 # Finally, we compute the fiber of the blowup map over the origin
 fiber_origin_basis_ideal = ideal(C, union(gens(basis_blowup_ideal), [z[1], z[2], z[3], z[4], z[5], z[6], z[7], z[8]]));
 reduced_fiber_origin_basis_ideal = radical(fiber_origin_basis_ideal);
 
-# The reduced fiber is used to compute the dimension of the fiver, which is used to show that the resolution is semi-small
+# The reduced fiber is used to compute the dimension of the fiber, which is used to show that the resolution is semi-small
 X_fiber = spec(C, reduced_fiber_origin_basis_ideal);
 components_fiber = irreducible_components(X_fiber);
 
@@ -516,3 +519,4 @@ X_min_basis_fiber = spec(C, ideal(C, min_basis_fiber));
 sing_fiber = singular_locus(X_min_basis_fiber);
 sing_ideal = modulus(OO(sing_fiber[1]));
 reduced_sing_ideal = radical(sing_ideal);  # Shows that the reduced singular locus is not the whole fiber
+=#

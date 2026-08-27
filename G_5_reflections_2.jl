@@ -273,7 +273,7 @@ W_delta_11_prime = ideal(S, [w_11_1, w_11_2, w_11_3, w_11_4, w_11_5]);
 print(W_delta_11 == W_delta_11_prime + relations_ideal);  # Returns true
 
 # Investigate the second polynomial delta_12 and check that it yields the same radical ideal as delta_11, which is expected as delta_12 = delta_11^2
-W_delta_12 = preimage(pi_1, delta_12_ideal);
+W_delta_12 = preimage(pi_1, delta_12_ideal);  # Takes around a day to compute
 basis_W_delta_12 = standard_basis(W_delta_12, ordering=negdegrevlex(S));
 quo_W_delta_12 = quo_map(W_delta_12);
 quo_basis_W_delta_12 = ideal(S_quo, [simplify(quo_map(b)) for b in basis_W_delta_12]);
@@ -316,7 +316,7 @@ W_delta_21_prime = ideal(S, [w_21_1, w_21_2, w_21_3, w_21_4, w_21_5]);
 print(W_delta_21 == W_delta_21_prime + relations_ideal);  # Returns true
 
 # Investigate the second polynomial delta_22 and check that it yields the same radical ideal as delta_21, which is expected as delta_22 = delta_21^2
-W_delta_22 = preimage(pi_1, delta_22_ideal);
+W_delta_22 = preimage(pi_1, delta_22_ideal);  # Did not run through yet
 basis_W_delta_22 = standard_basis(W_delta_22, ordering=negdegrevlex(S));
 quo_W_delta_22 = quo_map(W_delta_22);
 quo_basis_W_delta_22 = ideal(S_quo, [simplify(quo_map(b)) for b in basis_W_delta_22]);
@@ -349,13 +349,13 @@ W_delta_11_delta_21_prime = ideal(S, [w_11_21_1, w_11_21_2, w_11_21_3, w_11_21_4
 print(W_delta_11_delta_21 == W_delta_11_delta_21_prime + relations_ideal);  # Returns true
 
 # Investigate the polynomial delta_11*delta_22
-W_delta_11_delta_22 = preimage(pi_1, delta_11_delta_22_ideal);
+W_delta_11_delta_22 = preimage(pi_1, delta_11_delta_22_ideal);  # Did not run through yet
 basis_W_delta_11_delta_22 = standard_basis(W_delta_11_delta_22, ordering=negdegrevlex(S));
 quo_W_delta_11_delta_22 = quo_map(W_delta_11_delta_22);
 quo_basis_W_delta_11_delta_22 = ideal(S_quo, [simplify(quo_map(b)) for b in basis_W_delta_11_delta_22]);
 
 # Investigate the polynomial delta_12*delta_21
-W_delta_12_delta_21 = preimage(pi_1, delta_12_delta_21_ideal);
+W_delta_12_delta_21 = preimage(pi_1, delta_12_delta_21_ideal);  # Did not run through yet
 basis_W_delta_12_delta_21 = standard_basis(W_delta_12_delta_21, ordering=negdegrevlex(S));
 quo_W_delta_12_delta_21 = quo_map(W_delta_12_delta_21);
 quo_basis_W_delta_12_delta_21 = ideal(S_quo, [simplify(quo_map(b)) for b in basis_W_delta_12_delta_21]);
